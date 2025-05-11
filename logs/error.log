@@ -1,0 +1,1 @@
+[10-May-2025 14:28:07 Europe/Berlin] PHP Warning:  mail(): Failed to connect to mailserver at &quot;localhost&quot; port 25, verify your &quot;SMTP&quot; and &quot;smtp_port&quot; setting in php.ini or use ini_set() in C:\xampp\htdocs\weather1.0\handlers\contact_handler.php on line 498

@@ -1,0 +1,172 @@
+/* WeatherVoyager Custom Styles */
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(135deg, #0d6efd 0%, #0dcaf0 100%);
+    color: white;
+    padding: 3rem 0;
+}
+
+/* Card hover effects */
+.destination-card {
+    transition: all 0.3s ease;
+}
+
+.destination-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2) !important;
+}
+
+/* Weather icon styling */
+.weather-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Forecast cards */
+.forecast-card {
+    background-color: #f8f9fa;
+    border-left: 4px solid #0d6efd;
+}
+
+/* Custom badge styles */
+.badge-weather {
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem 0.75rem;
+}
+
+/* Activities section */
+.activities-container {
+    background-color: #f0f8ff;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-top: 1rem;
+}
+
+/* Temperature display */
+.temp-display {
+    font-size: 2.5rem;
+    font-weight: 600;
+}
+
+/* Weather labels */
+.weather-label {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.weather-label i {
+    margin-right: 0.25rem;
+}
+
+/* Result title bar */
+.result-title {
+    background: linear-gradient(135deg, #6610f2 0%, #0dcaf0 100%);
+    color: white;
+    padding: 0.75rem;
+    border-radius: 0.5rem 0.5rem 0 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+    .temp-display {
+        font-size: 2rem;
+    }
+    
+    .weather-labels-container {
+        flex-direction: column;
+    }
+}
+
+/* Map styles */
+.custom-div-icon {
+    background: transparent;
+    border: none;
+}
+
+.marker-pin {
+    width: 30px;
+    height: 30px;
+    border-radius: 50% 50% 50% 0;
+    background: #c30b82;
+    position: absolute;
+    transform: rotate(-45deg);
+    left: 50%;
+    top: 50%;
+    margin: -15px 0 0 -15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.marker-pin::after {
+    content: '';
+    width: 24px;
+    height: 24px;
+    margin: 3px 0 0 3px;
+    background: #fff;
+    position: absolute;
+    border-radius: 50%;
+}
+
+.marker-pin span {
+    transform: rotate(45deg);
+    color: #000;
+    font-weight: bold;
+    z-index: 1;
+    position: relative;
+}
+
+.bg-green { background: #4CAF50; }
+.bg-blue { background: #2196F3; }
+.bg-gray { background: #9E9E9E; }
+
+.map-popup {
+    text-align: center;
+    min-width: 150px;
+}
+
+#map-container {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    margin-bottom: 2rem;
+}
+
+/* Favorites Button */
+.btn-favorite {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    transition: transform 0.2s;
+    padding: 0 10px;
+}
+
+.btn-favorite:hover {
+    transform: scale(1.2);
+}
+
+/* Notification */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #4CAF50;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    z-index: 1050;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: all 0.3s ease;
+}
+
+.notification.show {
+    opacity: 1;
+    transform: translateY(0);
+}
