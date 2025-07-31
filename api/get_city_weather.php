@@ -1,24 +1,18 @@
 <?php
-// Include configuration and services
+
 require_once '../includes/config.php';
-require_once '../includes/WeatherService.php';
 
-// Set headers to allow JSON response
 header('Content-Type: application/json');
-
-// Handle CORS if needed
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Allow-Headers: Content-Type');
 
-// Check if this is a POST request
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405); // Method Not Allowed
+    http_response_code(405);
     echo json_encode(['error' => 'Method not allowed. Please use POST.']);
     exit;
 }
 
-// Get city and country from request
 $city = isset($_POST['city']) ? trim($_POST['city']) : '';
 $country = isset($_POST['country']) ? trim($_POST['country']) : '';
 
@@ -27,7 +21,6 @@ if (empty($city) || empty($country)) {
     exit;
 }
 
-// Find the city in our predefined list
 $cityFound = false;
 $cityInfo = null;
 
@@ -44,54 +37,58 @@ if (!$cityFound) {
     exit;
 }
 
-// Get coordinates
 list($city, $country, $lat, $lon) = $cityInfo;
+$weatherUrl = OPENWEATHER_API_URL . "/weather?lat={$lat}&lon={$lon}&units=metric&appid=" . OPENWEATHER_API_KEY;
+$forecastUrl = OPENWEATHER_API_URL . "/forecast?lat={$lat}&lon={$lon}&units=metric&appid=" . OPENWEATHER_API_KEY;
+$currentResponse = file_get_contents($weatherUrl);
+$currentData = json_decode($currentResponse, true);
 
-// Initialize weather service
-$weatherService = new WeatherService();
-
-// Get current weather
-$currentWeather = $weatherService->getCurrentWeather($lat, $lon, true);
-
-if (!$currentWeather) {
+if (!$currentData) {
     echo json_encode(['error' => "Could not fetch weather data for $city, $country"]);
     exit;
 }
+$forecastResponse = file_get_contents($forecastUrl);
+$forecastData = json_decode($forecastResponse, true);
 
-// Get forecast
-$forecast = $weatherService->getForecast($lat, $lon);
-
-if (!$forecast) {
+if (!$forecastData) {
     echo json_encode(['error' => "Could not fetch forecast data for $city, $country"]);
     exit;
 }
+$currentWeather = [
+    'temp' => round($currentData['main']['temp']),
+    'condition' => $currentData['weather'][0]['main'],
+    'description' => $currentData['weather'][0]['description'],
+    'humidity' => $currentData['main']['humidity'],
+    'wind_speed' => round($currentData['wind']['speed'] * 3.6, 1),
+    'uv_index' => 2, // Default since UV requires separate API call
+    'precipitation' => isset($currentData['rain']) ? ($currentData['rain']['1h'] ?? 0) : 0
+];
 
-// Add average precipitation to current weather for activity suggestions
-$precipitation = 0;
-foreach ($forecast as $day) {
-    $precipitation += $day['precipitation'];
+// Process 5-day forecast
+$forecast = [];
+$processedDates = [];
+foreach ($forecastData['list'] as $forecastItem) {
+    $date = date('Y-m-d', $forecastItem['dt']);
+    if (!in_array($date, $processedDates) && count($processedDates) < 5) {
+        $forecast[] = [
+            'date' => $date,
+            'temp_max' => round($forecastItem['main']['temp_max']),
+            'temp_min' => round($forecastItem['main']['temp_min']),
+            'condition' => $forecastItem['weather'][0]['main'],
+            'humidity' => $forecastItem['main']['humidity'],
+            'wind_speed' => round($forecastItem['wind']['speed'] * 3.6, 1)
+        ];
+        $processedDates[] = $date;
+    }
 }
-$currentWeather['precipitation'] = $precipitation / count($forecast);
 
-// Suggest activities
-$activities = $weatherService->suggestActivities($currentWeather);
-
-// Generate travel advice
-$travelAdvice = $weatherService->generateTravelAdvice($currentWeather, $forecast);
-
-// Create response
 $response = [
     'city' => $city,
     'country' => $country,
-    'lat' => $lat,
-    'lng' => $lon,
     'current' => $currentWeather,
     'forecast' => $forecast,
-    'activities' => $activities,
-    'travel_advice' => $travelAdvice,
-    'match_score' => 100 // Default high score for a manually selected favorite
+    'lat' => $lat,
+    'lon' => $lon
 ];
 
-// Return the response
 echo json_encode($response);
-exit;

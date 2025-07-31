@@ -1,7 +1,4 @@
-<?php
-// Load environment variables
-require_once __DIR__ . '/config/env_loader.php';
-?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,10 +13,10 @@ require_once __DIR__ . '/config/env_loader.php';
     <link rel="stylesheet" href="/weather1.0/css/styles.css">
 </head>
 <body>
-    <!-- Header/Navigation -->
+   
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
-            <a class="navbar-brand" href="/weather1.0/home">
+            <a class="navbar-brand" href="home">
                 <i class="fas fa-cloud-sun-rain me-2"></i>
                 WeatherVoyager
             </a>
@@ -29,20 +26,19 @@ require_once __DIR__ . '/config/env_loader.php';
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="/weather1.0/home">Home</a>
+                        <a class="nav-link" href="home">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/weather1.0/about">About</a>
+                        <a class="nav-link" href="about">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/weather1.0/contact">Contact</a>
+                        <a class="nav-link" href="https://code-craft-website-solutions-2d68a0b57273.herokuapp.com/contact.php">Contact</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
-
-    <!-- 404 Content -->
+   
     <div class="container my-5 py-5">
         <div class="row">
             <div class="col-lg-8 mx-auto text-center">
@@ -63,7 +59,7 @@ require_once __DIR__ . '/config/env_loader.php';
         </div>
     </div>
 
-    <!-- Footer -->
+ <!-- Footer -->
     <footer class="bg-dark text-white py-4 mt-5">
         <div class="container">
             <div class="row">
@@ -74,9 +70,9 @@ require_once __DIR__ . '/config/env_loader.php';
                 <div class="col-md-6 text-md-end">
                     <p class="small">&copy; <?php echo date('Y'); ?> WeatherVoyager. All rights reserved.</p>
                     <div class="small">
-                        <a href="/weather1.0/home" class="text-white me-2">Home</a>
-                        <a href="/weather1.0/about" class="text-white me-2">About</a>
-                        <a href="/weather1.0/contact" class="text-white">Contact</a>
+                        <a href="home" class="text-white me-2">Home</a>
+                        <a href="about" class="text-white me-2">About</a>
+                        <a href="https://code-craft-website-solutions-2d68a0b57273.herokuapp.com/contact.php" class="text-white">Contact</a>
                     </div>
                 </div>
             </div>

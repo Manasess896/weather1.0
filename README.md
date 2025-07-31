@@ -30,8 +30,7 @@ weather1.0/
 │   ├── get_recommendations.php # Weather recommendations API
 │   └── get_city_weather.php   # City weather data API
 ├── includes/                  # Shared PHP code
-│   ├── config.php             # Configuration settings
-│   └── WeatherService.php     # Weather service class
+│   └── config.php             # Configuration settings
 ├── config/                    # Configuration files
 │   └── env_loader.php         # Environment variables loader
 ├── css/                       # Stylesheets
@@ -69,12 +68,4 @@ To contribute to this project:
 2. Create your feature branch (`git checkout -b feature/amazing-feature`)
 3. Commit your changes (`git commit -m 'Add some amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Contact
-
-For questions or support, please use the contact form on the website or reach out to the development team directly.
+5. Open a Pull RequesFor questions or support, please use the contact form on the website or reach out to the development team directly.

@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    // Global variables for pagination and map
+    // Global variables
     var allDestinations = [];
     var currentPage = 0;
     var destinationsPerPage = 6;
@@ -7,7 +7,40 @@ $(document).ready(function() {
     var markers = [];
     var favorites = loadFavorites();
 
-    // Favorites Management Functions
+    // Add smooth scroll behavior
+    $('html').css('scroll-behavior', 'smooth');
+
+    // Removed form animations that were causing issues with options sliding out of view
+    $('.form-check-input').on('change', function() {
+        // Simple highlight effect without animation
+        $(this).closest('.form-check').addClass('selected');
+    });
+
+    // Enhanced loading state
+    function showLoading() {
+        $('#loading').fadeIn(300);
+        $('#results-container').fadeOut(300);
+        $('body').addClass('loading-state');
+    }
+
+    function hideLoading() {
+        $('#loading').fadeOut(300);
+        $('body').removeClass('loading-state');
+    }
+
+    // Smooth card animations on load
+    // Modified card animations to be simpler and less movement-based
+    function animateCards() {
+        $('.destination-card').each(function(index) {
+            $(this).css({
+                'opacity': '0'
+            }).delay(index * 50).animate({
+                'opacity': '1'
+            }, 400);
+        });
+    }
+
+   
     function loadFavorites() {
         const saved = localStorage.getItem('weathervoyager_favorites');
         return saved ? JSON.parse(saved) : [];
@@ -33,7 +66,6 @@ $(document).ready(function() {
         return favorites.some(f => f.city === city && f.country === country);
     }
 
-    // Update favorite buttons after rendering
     function updateFavoritesUI() {
         $('.btn-favorite').each(function() {
             const city = $(this).data('city');
@@ -47,7 +79,7 @@ $(document).ready(function() {
         });
     }
 
-    // Handle favorite button clicks
+   
     $(document).on('click', '.btn-favorite', function() {
         const city = $(this).data('city');
         const country = $(this).data('country');
@@ -59,70 +91,84 @@ $(document).ready(function() {
             addToFavorites(city, country);
             $(this).html('<i class="fas fa-heart text-danger"></i>');
             
-            // Show a small notification
+           
             showNotification(`${city}, ${country} added to favorites!`);
         }
     });
 
-    // Show floating notification
-    function showNotification(message) {
-        const notification = $(`<div class="notification">${message}</div>`);
+    // Enhanced notification system
+    function showNotification(message, type = 'success') {
+        const iconClass = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-triangle';
+        const notification = $(`
+            <div class="notification ${type}">
+                <i class="${iconClass}" style="margin-right: 0.5rem;"></i>
+                ${message}
+            </div>
+        `);
+        
         $('body').append(notification);
         
+        // Add entrance animation
         setTimeout(() => {
             notification.addClass('show');
-            
-            setTimeout(() => {
-                notification.removeClass('show');
-                setTimeout(() => notification.remove(), 500);
-            }, 2000);
         }, 100);
+        
+        // Auto remove after 3 seconds
+        setTimeout(() => {
+            notification.removeClass('show');
+            setTimeout(() => notification.remove(), 500);
+        }, 3000);
+        
+        // Click to dismiss
+        notification.on('click', function() {
+            $(this).removeClass('show');
+            setTimeout(() => $(this).remove(), 500);
+        });
     }
 
-    // Handle form submission
+    
     $('#weather-form').on('submit', function(e) {
         e.preventDefault();
         
-        // Show loading indicator
+   
         $('#loading').show();
         $('#results-container').hide();
         
-        // Get form data
+      
         var formData = $(this).serialize();
         
-        // Make AJAX request to backend
+
         $.ajax({
             type: 'POST',
             url: 'api/get_recommendations.php',
             data: formData,
             dataType: 'json',
             success: function(response) {
-                // Hide loading indicator
+               
                 $('#loading').hide();
                 
-                // Store all destinations globally
+              
                 allDestinations = response;
                 
-                // Reset to first page
+               
                 currentPage = 0;
-                
-                // Display results
+             
                 displayResults();
             },
             error: function(xhr, status, error) {
-                // Hide loading indicator
+              
                 $('#loading').hide();
                 
-                // Show error message
+             
                 alert('Error: ' + error + '. Please try again later.');
                 console.error(xhr.responseText);
             }
         });
     });
     
-    // Function to display results with pagination
+    
     function displayResults() {
-        // Clear previous results
+       
         var resultsRow = $('#results-row');
         resultsRow.empty();
         
@@ -134,27 +180,27 @@ $(document).ready(function() {
             return;
         }
         
-        // Get the temperature unit from the first destination (they all use the same unit)
+        
         var tempUnit = allDestinations[0].temp_unit || '°C';
         
-        // Calculate start and end indices for current page
+       
         var startIndex = currentPage * destinationsPerPage;
         var endIndex = Math.min(startIndex + destinationsPerPage, allDestinations.length);
         
-        // Get destinations for current page
+        
         var pageDestinations = allDestinations.slice(startIndex, endIndex);
         
-        // Loop through destinations for this page
+    
         for (var i = 0; i < pageDestinations.length; i++) {
             var destination = pageDestinations[i];
             
-            // Create weather icons and labels based on conditions
+            
             var weatherIcons = getWeatherIcons(destination.current);
             
-            // Get temperature unit from the destination
+            
             var displayUnit = destination.current.temp_unit || tempUnit;
             
-            // Create forecast cards
+          
             var forecastHtml = '';
             for (var j = 0; j < destination.forecast.length; j++) {
                 var day = destination.forecast[j];
@@ -162,29 +208,29 @@ $(document).ready(function() {
                 var dayUnit = day.temp_unit || displayUnit;
                 
                 forecastHtml += `
-                    <div class="col">
+                    <div class="col-4">
                         <div class="card forecast-card h-100">
                             <div class="card-body p-2 text-center">
                                 <h6>${dayName}</h6>
-                                <div class="weather-icon">
+                                <div class="weather-icon-small">
                                     <i class="${getWeatherIconClass(day.condition)}"></i>
                                 </div>
-                                <p class="mb-0">${day.temp_max}${dayUnit} / ${day.temp_min}${dayUnit}</p>
-                                <small>${day.condition}</small>
+                                <p class="mb-0 forecast-temp">${day.temp_max}${dayUnit} / ${day.temp_min}${dayUnit}</p>
+                                <small class="forecast-condition">${day.condition}</small>
                             </div>
                         </div>
                     </div>
                 `;
             }
             
-            // Create activities section
+            
             var activitiesHtml = '<div class="activities-container mt-3"><h6><i class="fas fa-hiking me-2"></i>Suggested Activities:</h6><ul class="mb-0">';
             destination.activities.forEach(function(activity) {
                 activitiesHtml += `<li>${activity}</li>`;
             });
             activitiesHtml += '</ul></div>';
             
-            // Create travel advice section if available
+            
             var travelAdviceHtml = '';
             if (destination.travel_advice) {
                 travelAdviceHtml = `
@@ -195,50 +241,46 @@ $(document).ready(function() {
                 `;
             }
             
-            // Build destination card
+          
             var cardHtml = `
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="card h-100 shadow destination-card">
                         <div class="result-title d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0">${destination.city}, ${destination.country}</h5>
+                            <h5 class="mb-0 city-title">${destination.city}, ${destination.country}</h5>
                             <button class="btn btn-sm btn-favorite" data-city="${destination.city}" data-country="${destination.country}">
                                 <i class="far fa-heart"></i>
                             </button>
                         </div>
                         <div class="card-body">
-                            <div class="d-flex align-items-center justify-content-between mb-3">
-                                <div class="temp-display">
-                                    ${destination.current.temp}${displayUnit}
-                                </div>
-                                <div class="weather-icon text-center">
-                                    <i class="${getWeatherIconClass(destination.current.condition)} fa-2x"></i>
-                                    <div>${destination.current.condition}</div>
-                                </div>
-                            </div>
-                            
-                            <div class="weather-labels-container d-flex flex-wrap">
-                                <div class="weather-label"><i class="fas fa-water text-primary"></i> ${destination.current.humidity}%</div>
-                                <div class="weather-label"><i class="fas fa-wind text-info"></i> ${destination.current.wind_speed} km/h</div>
-                                <div class="weather-label"><i class="fas fa-sun text-warning"></i> UV: ${destination.current.uv_index}</div>
-                            </div>
-                            
-                            <h6 class="mt-4">3-Day Forecast</h6>
-                            <div class="row row-cols-3 g-2">
-                                ${forecastHtml}
-                            </div>
-                            
-                            ${activitiesHtml}
-                            
-                            ${travelAdviceHtml}
-                            
-                            <div class="mt-3">
-                                <h6>Weather Match Score:</h6>
-                                <div class="progress">
-                                    <div class="progress-bar bg-success" role="progressbar" style="width: ${destination.match_score}%" 
-                                        aria-valuenow="${destination.match_score}" aria-valuemin="0" aria-valuemax="100">
-                                        ${destination.match_score}%
+                            <div class="row align-items-center mb-2">
+                                <div class="col-6 text-center">
+                                    <div class="temp-display-compact">
+                                        ${destination.current.temp}${displayUnit}
                                     </div>
                                 </div>
+                                <div class="col-6 text-center">
+                                    <div class="weather-icon-compact">
+                                        <i class="${getWeatherIconClass(destination.current.condition)}"></i>
+                                        <div class="current-condition">${destination.current.condition}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="weather-details d-flex justify-content-around mb-2">
+                                <div class="weather-data-item"><i class="fas fa-water text-primary"></i> ${destination.current.humidity}%</div>
+                                <div class="weather-data-item"><i class="fas fa-wind text-info"></i> ${destination.current.wind_speed} km/h</div>
+                            </div>
+                            
+                            <div class="match-badge text-center mb-2">
+                                <span class="badge bg-success">
+                                    <i class="fas fa-percentage me-1"></i> Match: ${destination.match_score}%
+                                </span>
+                            </div>
+                            
+                            <div class="text-center">
+                                <a href="destination.php?city=${encodeURIComponent(destination.city)}&country=${encodeURIComponent(destination.country)}" class="btn btn-sm btn-outline-primary w-100">
+                                    <i class="fas fa-info-circle me-1"></i> View Details
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -248,27 +290,23 @@ $(document).ready(function() {
             resultsRow.append(cardHtml);
         }
         
-        // Update pagination display
+        
         updatePagination();
         
-        // Initialize or update the map
+      
         initOrUpdateMap();
         
-        // Show results container
+        
         $('#results-container').show();
         
-        // Scroll to results
         $('html, body').animate({
             scrollTop: $("#results-container").offset().top - 100
         }, 800);
 
-        // After rendering all destination cards
         updateFavoritesUI();
     }
     
-    // Function to initialize or update the map
     function initOrUpdateMap() {
-        // Clear existing markers
         if (markers.length > 0) {
             markers.forEach(function(marker) {
                 marker.remove();
@@ -276,18 +314,15 @@ $(document).ready(function() {
             markers = [];
         }
         
-        // Initialize map if it doesn't exist
         if (!map) {
             map = L.map('results-map').setView([20, 0], 2);
             
-            // Add tile layer (OpenStreetMap)
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
                 maxZoom: 18
             }).addTo(map);
         }
         
-        // Add markers for all destinations
         allDestinations.forEach(function(destination, index) {
             var markerColor = index < 3 ? 'green' : (index < 6 ? 'blue' : 'gray');
             var markerIcon = L.divIcon({
@@ -299,13 +334,13 @@ $(document).ready(function() {
                 iconAnchor: [15, 42]
             });
             
-            // Create the marker
+           
             var marker = L.marker([destination.lat, destination.lng], {
                 icon: markerIcon,
                 title: destination.city + ', ' + destination.country
             }).addTo(map);
             
-            // Create popup content
+           
             var popupContent = `
                 <div class="map-popup">
                     <h5>${destination.city}, ${destination.country}</h5>
@@ -319,19 +354,19 @@ $(document).ready(function() {
                 </div>
             `;
             
-            // Add popup to marker
+    
             marker.bindPopup(popupContent);
             markers.push(marker);
         });
         
-        // Fit map to show all markers
+      
         if (markers.length > 0) {
             var group = new L.featureGroup(markers);
             map.fitBounds(group.getBounds().pad(0.1));
         }
     }
     
-    // Handle view toggle buttons
+   
     $('#card-view-btn').on('click', function() {
         $(this).addClass('active').removeClass('btn-outline-primary').addClass('btn-primary');
         $('#map-view-btn').removeClass('active').removeClass('btn-primary').addClass('btn-outline-primary');
@@ -347,7 +382,6 @@ $(document).ready(function() {
         $('#results-row').hide();
         $('#map-container').show();
         
-        // Trigger a resize event to make sure the map renders correctly
         if (map) {
             setTimeout(function() {
                 map.invalidateSize();
@@ -355,7 +389,7 @@ $(document).ready(function() {
         }
     });
     
-    // Function to update pagination controls
+
     function updatePagination() {
         var paginationContainer = $('#pagination-controls');
         paginationContainer.empty();
@@ -365,10 +399,10 @@ $(document).ready(function() {
             return;
         }
         
-        // Calculate total pages
+  
         var totalPages = Math.ceil(allDestinations.length / destinationsPerPage);
         
-        // Create pagination HTML
+     
         var paginationHtml = `
             <div class="d-flex justify-content-center">
                 <nav aria-label="Destination results pages">
@@ -380,7 +414,6 @@ $(document).ready(function() {
                         </li>
         `;
         
-        // Add page numbers
         for (var i = 0; i < totalPages; i++) {
             paginationHtml += `
                 <li class="page-item ${i === currentPage ? 'active' : ''}">
@@ -403,7 +436,6 @@ $(document).ready(function() {
         paginationContainer.html(paginationHtml);
         paginationContainer.show();
         
-        // Add event handlers for pagination controls
         $('.page-number').on('click', function(e) {
             e.preventDefault();
             currentPage = parseInt($(this).data('page'));
@@ -427,7 +459,7 @@ $(document).ready(function() {
         });
     }
     
-    // Helper function to get weather icon class based on condition
+    
     function getWeatherIconClass(condition) {
         condition = condition.toLowerCase();
         
@@ -450,7 +482,7 @@ $(document).ready(function() {
         }
     }
     
-    // Helper function to get multiple weather icons/details
+    
     function getWeatherIcons(weatherData) {
         var icons = [];
         
@@ -475,13 +507,13 @@ $(document).ready(function() {
         return icons.join('');
     }
 
-    // Handle favorites link click
+    
     $('#favorites-link').on('click', function(e) {
         e.preventDefault();
         showFavoritesModal();
     });
     
-    // Handle clear favorites button click
+    
     $('#clear-favorites').on('click', function() {
         if (confirm('Are you sure you want to remove all favorites?')) {
             favorites = [];
@@ -491,12 +523,12 @@ $(document).ready(function() {
         }
     });
     
-    // Function to show favorites modal
+    
     function showFavoritesModal() {
         const favoritesContainer = $('#favorites-container');
         favoritesContainer.empty();
         
-        // Check if we have any favorites
+        
         if (favorites.length === 0) {
             favoritesContainer.html(`
                 <div class="text-center py-5">
@@ -536,7 +568,7 @@ $(document).ready(function() {
             favoritesHtml += '</div>';
             favoritesContainer.html(favoritesHtml);
             
-            // Add event handlers for remove buttons
+            
             $('.remove-favorite').on('click', function() {
                 const city = $(this).data('city');
                 const country = $(this).data('country');
@@ -545,37 +577,36 @@ $(document).ready(function() {
                 showNotification(`${city}, ${country} removed from favorites`);
             });
             
-            // Add event handlers for fetch weather buttons
+           
             $('.fetch-weather').on('click', function() {
                 const city = $(this).data('city');
                 const country = $(this).data('country');
                 
-                // Close modal
+                
                 $('#favorites-modal').modal('hide');
                 
-                // Show loading indicator
+                
                 $('#loading').show();
                 
-                // Fetch weather for this specific city
+               
                 fetchSingleCityWeather(city, country);
             });
         }
         
-        // Show the modal
+       
         const favoritesModal = new bootstrap.Modal(document.getElementById('favorites-modal'));
         favoritesModal.show();
     }
     
-    // Function to fetch weather for a single city from favorites
     function fetchSingleCityWeather(city, country) {
-        // Find city coordinates from the cities list in config
+        
         $.ajax({
             type: 'POST',
             url: 'api/get_city_weather.php',
             data: { city: city, country: country },
             dataType: 'json',
             success: function(response) {
-                // Hide loading indicator
+                
                 $('#loading').hide();
                 
                 if (response.error) {
@@ -583,20 +614,20 @@ $(document).ready(function() {
                     return;
                 }
                 
-                // Store result in global variable
+              
                 allDestinations = [response];
                 
-                // Reset to first page
+                
                 currentPage = 0;
                 
-                // Display results
+              // Display results
                 displayResults();
             },
             error: function(xhr, status, error) {
-                // Hide loading indicator
+               
                 $('#loading').hide();
                 
-                // Show error message
+              
                 showNotification('Error fetching weather data. Please try again later.');
                 console.error(xhr.responseText);
             }

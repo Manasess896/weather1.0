@@ -1,45 +1,31 @@
 <?php
-// Load environment variables from .env file
-function loadEnv($path) {
-    if (!file_exists($path)) {
-        throw new \Exception(".env file not found at {$path}");
-    }
-    
-    $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-    foreach ($lines as $line) {
-        // Skip comments
-        if (strpos(trim($line), '#') === 0) {
-            continue;
+require_once dirname(__DIR__) . '/vendor/autoload.php';
+use Dotenv\Dotenv;
+
+// Load .env
+$dotenv = Dotenv::createImmutable(dirname(__DIR__));
+$dotenv->safeLoad();
+defineOpenWeatherApiKey();
+
+function defineOpenWeatherApiKey()
+{
+    $key = $_ENV['OPENWEATHER_API_KEY'] ?? getenv('OPENWEATHER_API_KEY');
+
+    if ($key) {
+        if (!defined('OPENWEATHER_API_KEY')) {
+            define('OPENWEATHER_API_KEY', $key);
         }
-        
-        list($key, $value) = explode('=', $line, 2);
-        $key = trim($key);
-        $value = trim($value);
-        
-        if (!array_key_exists($key, $_ENV)) {
-            putenv(sprintf('%s=%s', $key, $value));
-            $_ENV[$key] = $value;
-            $_SERVER[$key] = $value;
-        }
+    } else {
+        // Log error or handle missing API key
+        error_log("OPENWEATHER_API_KEY is not set.");
     }
 }
 
-// Load .env file
-$envPath = dirname(__DIR__) . '/.env';
-loadEnv($envPath);
 
-// API Keys
-define('OPENWEATHER_API_KEY', $_ENV['OPENWEATHER_API_KEY'] ?? '');
-define('OPENMETEO_API_KEY', $_ENV['OPENMETEO_API_KEY'] ?? '');
 
-// Validate API keys
-if (empty(OPENWEATHER_API_KEY)) {
-    error_log('OpenWeather API key is missing. Please check your .env file.');
-}
-
-// Base URLs for APIs
 define('OPENWEATHER_API_URL', 'https://api.openweathermap.org/data/2.5');
 define('OPENMETEO_API_URL', 'https://api.open-meteo.com/v1');
+// define('OPENWEATHER_API_KEY', getEnvVar('OPENWEATHER_API_KEY', ''));
 
 // List of cities for recommendations
 // Format: [city, country, latitude, longitude]
@@ -75,7 +61,7 @@ define('CITIES', [
     ['Seville', 'Spain', 37.3891, -5.9845],
     ['Valencia', 'Spain', 39.4699, -0.3763],
     ['Nice', 'France', 43.7102, 7.2620],
-    
+
     // North America
     ['New York', 'USA', 40.7128, -74.0060],
     ['San Francisco', 'USA', 37.7749, -122.4194],
@@ -101,7 +87,7 @@ define('CITIES', [
     ['Havana', 'Cuba', 23.1136, -82.3666],
     ['San Juan', 'Puerto Rico', 18.4655, -66.1057],
     ['Nassau', 'Bahamas', 25.0343, -77.3963],
-    
+
     // Asia
     ['Tokyo', 'Japan', 35.6762, 139.6503],
     ['Singapore', 'Singapore', 1.3521, 103.8198],
@@ -128,7 +114,7 @@ define('CITIES', [
     ['Chiang Mai', 'Thailand', 18.7883, 98.9853],
     ['Boracay', 'Philippines', 11.9674, 121.9248],
     ['Kathmandu', 'Nepal', 27.7172, 85.3240],
-    
+
     // Australia & Oceania
     ['Sydney', 'Australia', -33.8688, 151.2093],
     ['Auckland', 'New Zealand', -36.8509, 174.7645],
@@ -143,7 +129,7 @@ define('CITIES', [
     ['Fiji', 'Fiji', -17.7134, 178.0650],
     ['Tahiti', 'French Polynesia', -17.6509, -149.4260],
     ['Bora Bora', 'French Polynesia', -16.5004, -151.7415],
-    
+
     // Africa
     ['Cape Town', 'South Africa', -33.9249, 18.4241],
     ['Marrakech', 'Morocco', 31.6295, -7.9811],
@@ -158,7 +144,7 @@ define('CITIES', [
     ['Tunis', 'Tunisia', 36.8065, 10.1815],
     ['Mauritius', 'Mauritius', -20.3484, 57.5522],
     ['Dar es Salaam', 'Tanzania', -6.7924, 39.2083],
-    
+
     // South & Central America
     ['Rio de Janeiro', 'Brazil', -22.9068, -43.1729],
     ['Buenos Aires', 'Argentina', -34.6037, -58.3816],
@@ -180,7 +166,6 @@ define('CITIES', [
     ['Antigua', 'Guatemala', 14.5586, -90.7295]
 ]);
 
-// Error reporting
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);

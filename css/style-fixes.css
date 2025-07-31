@@ -1,0 +1,312 @@
+
+.destination-card {
+  padding: 0 !important;
+  height: auto !important;
+  overflow: visible !important;
+  max-height: 260px !important;
+}
+
+.destination-card .card-body {
+  padding: 0.75rem !important;
+}
+
+.destination-card .result-title {
+  padding: 0.75rem 1rem !important;
+}
+
+/* Fix for sliding animations - COMPLETE DISABLE */
+.animate-selection,
+.form-check,
+.form-check-label,
+.form-check-input,
+.custom-checkbox,
+.custom-checkbox-label,
+#weather-form,
+#weather-form *,
+.card,
+.card-body,
+.container,
+.row,
+.col-md-6,
+.col-md-4,
+.col-12 {
+  animation: none !important;
+  transform: none !important;
+  transition: none !important;
+  -webkit-animation: none !important;
+  -webkit-transform: none !important;
+  -webkit-transition: none !important;
+  -moz-animation: none !important;
+  -moz-transform: none !important;
+  -moz-transition: none !important;
+  -ms-animation: none !important;
+  -ms-transform: none !important;
+  -ms-transition: none !important;
+  -o-animation: none !important;
+  -o-transform: none !important;
+  -o-transition: none !important;
+}
+
+
+.custom-checkbox {
+  padding-left: 0rem !important;
+  margin-bottom: 0.5rem !important;
+  display: block !important;
+  position: relative !important;
+  animation: none !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+.custom-checkbox-label {
+  cursor: pointer !important;
+  animation: none !important;
+  transform: none !important;
+  transition: none !important;
+  display: block !important;
+  margin-bottom: 0 !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  position: static !important;
+  margin-left: 1.5rem !important;
+  padding-left: 0 !important;
+}
+
+.custom-checkbox input[type="checkbox"] {
+  position: absolute !important;
+  left: 0 !important;
+  top: 0.25rem !important;
+  z-index: 1 !important;
+  cursor: pointer !important;
+  opacity: 1 !important;
+  margin: 0 !important;
+  animation: none !important;
+  transform: none !important;
+  transition: none !important;
+  width: 1rem !important;
+  height: 1rem !important;
+}
+
+/* Override all hover effects for checkboxes */
+.custom-checkbox:hover,
+.custom-checkbox-label:hover,
+.custom-checkbox input:hover,
+.form-check:hover,
+.form-check-label:hover,
+.form-check-input:hover {
+  animation: none !important;
+  transform: none !important;
+  transition: none !important;
+  margin-left: inherit !important;
+  margin-right: inherit !important;
+  padding-left: inherit !important;
+  padding-right: inherit !important;
+  background: transparent !important;
+  border-radius: inherit !important;
+  padding: inherit !important;
+  margin: inherit !important;
+  scale: none !important;
+}
+
+/* Ensure icons are always visible */
+.custom-checkbox-label i,
+.form-check-label i {
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: inline !important;
+  margin-right: 0.5rem !important;
+}
+
+/* Fix for the entire form checkboxes */
+.form-check {
+  display: block !important;
+  position: relative !important;
+  padding-left: 0 !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.form-check .form-check-input {
+  position: absolute !important;
+  left: 0 !important;
+  top: 0.25rem !important;
+  margin: 0 !important;
+  width: 1rem !important;
+  height: 1rem !important;
+}
+
+.form-check .form-check-label {
+  margin-left: 1.5rem !important;
+  padding-left: 0 !important;
+  display: block !important;
+  cursor: pointer !important;
+}
+
+/* Completely disable the animate-selection class */
+.animate-selection {
+  transform: none !important;
+  transition: none !important;
+  scale: none !important;
+}
+
+/* Disable all checkbox-related animations and transitions from main CSS */
+.form-check,
+.form-check *,
+.custom-checkbox,
+.custom-checkbox * {
+  animation: none !important;
+  -webkit-animation: none !important;
+  transition: none !important;
+  -webkit-transition: none !important;
+  transform: none !important;
+  -webkit-transform: none !important;
+}
+
+/* Ensure stable positioning for all checkbox elements */
+.form-check,
+.custom-checkbox {
+  background: transparent !important;
+  border-radius: 0 !important;
+  padding: 0.5rem 0 !important;
+  margin: 0 !important;
+}
+
+button,
+.btn {
+  transition: background-color 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.selected .form-check-label {
+  color: var(--teal-primary);
+}
+
+
+body {
+  background: black;
+}
+
+/* Fix for text size in cards */
+.city-title {
+  font-size: 1.1rem !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.temp-display-compact {
+  font-size: 2.5rem !important;
+  font-weight: 700;
+  color: var(--green-primary);
+  background: linear-gradient(135deg, var(--green-primary) 0%, var(--green-secondary) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+}
+
+.weather-icon-compact {
+  font-size: 1.8rem;
+}
+
+.weather-icon-compact i {
+  margin-bottom: 0.3rem;
+}
+
+.current-condition {
+  font-size: 0.9rem;
+  font-weight: normal;
+}
+
+.weather-data-item {
+  font-size: 0.85rem;
+  padding: 0.4rem 0.5rem;
+  background: rgba(20, 184, 166, 0.1);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.forecast-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem !important;
+  color: var(--text-gray);
+}
+
+.forecast-row {
+  margin: 0 -5px;
+}
+
+.forecast-card {
+  border-left: 2px solid var(--teal-primary) !important;
+  padding: 0.5rem !important;
+  margin-bottom: 0 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+}
+
+.forecast-card h6 {
+  font-size: 0.8rem !important;
+  margin-bottom: 0.2rem !important;
+}
+
+.forecast-temp {
+  font-size: 0.8rem !important;
+}
+
+.forecast-condition {
+  font-size: 0.75rem !important;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.weather-icon-small {
+  font-size: 1.5rem !important;
+  margin-bottom: 0.3rem !important;
+}
+
+.weather-icon-small i {
+  font-size: 1.5rem !important;
+}
+
+
+.activities-container {
+  padding: 0.75rem !important;
+  margin-top: 1rem !important;
+}
+
+.activities-container h6 {
+  font-size: 0.9rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.activities-container ul {
+  margin-left: 0.5rem !important;
+  padding-left: 0.75rem !important;
+}
+
+.activities-container li {
+  font-size: 0.85rem !important;
+  margin-bottom: 0.25rem !important;
+  list-style-type: disc;
+}
+
+
+.match-score-title {
+  font-size: 0.9rem;
+  margin-bottom: 0.3rem;
+}
+
+.travel-advice-container {
+  padding: 0.75rem !important;
+  margin-top: 0.75rem !important;
+}
+
+.travel-advice-container h6 {
+  font-size: 0.9rem !important;
+  margin-bottom: 0.3rem !important;
+}
+
+.travel-advice-container p {
+  font-size: 0.85rem !important;
+  margin-bottom: 0 !important;
+}
