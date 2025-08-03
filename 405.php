@@ -72,11 +72,10 @@
       Sorry, the HTTP method you used is not allowed for this resource.
       This endpoint only accepts specific request methods.
     </p>
-    <a href="index.php" class="back-button">← Back to Weather App</a>
+    <a href="home" class="back-button">← Back to Weather App</a>
   </div>
 
   <script>
-   
     document.addEventListener('DOMContentLoaded', function() {
       const container = document.querySelector('.error-container');
       container.style.opacity = '0';

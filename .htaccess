@@ -15,8 +15,10 @@ RewriteRule ^ - [L]
 RewriteCond %{THE_REQUEST} ^[A-Z]{3,}\s/index\.php[?\s] [NC]
 RewriteRule ^index\.php$ /home [R=301,L]
 
-RewriteRule ^home/?$ index.php [L]
+RewriteRule ^home?$ index.php [L]
 RewriteRule ^about?$ about.php [L]
+RewriteRule ^city?$  destination.php [L]
+RewriteRule ^news?$ news.php [L]
 RewriteRule ^api/.*$ 404.php [L]
 RewriteRule ^includes/.*$ 404.php [L]
 

@@ -14,100 +14,6 @@
   padding: 0.75rem 1rem !important;
 }
 
-/* Fix for sliding animations - COMPLETE DISABLE */
-.animate-selection,
-.form-check,
-.form-check-label,
-.form-check-input,
-.custom-checkbox,
-.custom-checkbox-label,
-#weather-form,
-#weather-form *,
-.card,
-.card-body,
-.container,
-.row,
-.col-md-6,
-.col-md-4,
-.col-12 {
-  animation: none !important;
-  transform: none !important;
-  transition: none !important;
-  -webkit-animation: none !important;
-  -webkit-transform: none !important;
-  -webkit-transition: none !important;
-  -moz-animation: none !important;
-  -moz-transform: none !important;
-  -moz-transition: none !important;
-  -ms-animation: none !important;
-  -ms-transform: none !important;
-  -ms-transition: none !important;
-  -o-animation: none !important;
-  -o-transform: none !important;
-  -o-transition: none !important;
-}
-
-
-.custom-checkbox {
-  padding-left: 0rem !important;
-  margin-bottom: 0.5rem !important;
-  display: block !important;
-  position: relative !important;
-  animation: none !important;
-  transform: none !important;
-  transition: none !important;
-}
-
-.custom-checkbox-label {
-  cursor: pointer !important;
-  animation: none !important;
-  transform: none !important;
-  transition: none !important;
-  display: block !important;
-  margin-bottom: 0 !important;
-  font-weight: 400 !important;
-  line-height: 1.5 !important;
-  position: static !important;
-  margin-left: 1.5rem !important;
-  padding-left: 0 !important;
-}
-
-.custom-checkbox input[type="checkbox"] {
-  position: absolute !important;
-  left: 0 !important;
-  top: 0.25rem !important;
-  z-index: 1 !important;
-  cursor: pointer !important;
-  opacity: 1 !important;
-  margin: 0 !important;
-  animation: none !important;
-  transform: none !important;
-  transition: none !important;
-  width: 1rem !important;
-  height: 1rem !important;
-}
-
-/* Override all hover effects for checkboxes */
-.custom-checkbox:hover,
-.custom-checkbox-label:hover,
-.custom-checkbox input:hover,
-.form-check:hover,
-.form-check-label:hover,
-.form-check-input:hover {
-  animation: none !important;
-  transform: none !important;
-  transition: none !important;
-  margin-left: inherit !important;
-  margin-right: inherit !important;
-  padding-left: inherit !important;
-  padding-right: inherit !important;
-  background: transparent !important;
-  border-radius: inherit !important;
-  padding: inherit !important;
-  margin: inherit !important;
-  scale: none !important;
-}
-
 /* Ensure icons are always visible */
 .custom-checkbox-label i,
 .form-check-label i {
@@ -115,59 +21,6 @@
   visibility: visible !important;
   display: inline !important;
   margin-right: 0.5rem !important;
-}
-
-/* Fix for the entire form checkboxes */
-.form-check {
-  display: block !important;
-  position: relative !important;
-  padding-left: 0 !important;
-  margin-bottom: 0.5rem !important;
-}
-
-.form-check .form-check-input {
-  position: absolute !important;
-  left: 0 !important;
-  top: 0.25rem !important;
-  margin: 0 !important;
-  width: 1rem !important;
-  height: 1rem !important;
-}
-
-.form-check .form-check-label {
-  margin-left: 1.5rem !important;
-  padding-left: 0 !important;
-  display: block !important;
-  cursor: pointer !important;
-}
-
-/* Completely disable the animate-selection class */
-.animate-selection {
-  transform: none !important;
-  transition: none !important;
-  scale: none !important;
-}
-
-/* Disable all checkbox-related animations and transitions from main CSS */
-.form-check,
-.form-check *,
-.custom-checkbox,
-.custom-checkbox * {
-  animation: none !important;
-  -webkit-animation: none !important;
-  transition: none !important;
-  -webkit-transition: none !important;
-  transform: none !important;
-  -webkit-transform: none !important;
-}
-
-/* Ensure stable positioning for all checkbox elements */
-.form-check,
-.custom-checkbox {
-  background: transparent !important;
-  border-radius: 0 !important;
-  padding: 0.5rem 0 !important;
-  margin: 0 !important;
 }
 
 button,
@@ -184,7 +37,6 @@ body {
   background: black;
 }
 
-/* Fix for text size in cards */
 .city-title {
   font-size: 1.1rem !important;
   overflow: hidden;

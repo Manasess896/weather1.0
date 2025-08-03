@@ -404,8 +404,8 @@ if ($allNewsItems && $totalArticles > 0) {
     </div>
 
     <div class="back-nav">
-      <a href="index.php" class="back-button">← Back to Weather App</a>
-      <a href="news.php" class="refresh-button">🔄 Refresh News</a>
+      <a href="home" class="back-button">← Back to Weather App</a>
+      <a href="news" class="refresh-button">🔄 Refresh News</a>
     </div>
 
     <?php if ($totalArticles > 0): ?>
@@ -419,20 +419,15 @@ if ($allNewsItems && $totalArticles > 0) {
       <div class="news-grid">
         <?php
         foreach ($newsItems as $item):
-          // Clean up title and description
           $title = html_entity_decode(strip_tags((string)$item->title));
           $description = html_entity_decode(strip_tags((string)$item->description));
           $link = (string)$item->link;
           $pubDate = isset($item->pubDate) ? date('M j, Y', strtotime((string)$item->pubDate)) : 'Recent';
-
-          // Extract source from title or use domain
           $source = 'News Source';
           if (preg_match('/- (.+)$/', $title, $matches)) {
             $source = trim($matches[1]);
             $title = preg_replace('/ - .+$/', '', $title);
           }
-
-          // Limit description length
           if (strlen($description) > 150) {
             $description = substr($description, 0, 150) . '...';
           }
@@ -452,24 +447,19 @@ if ($allNewsItems && $totalArticles > 0) {
           </article>
         <?php endforeach; ?>
       </div>
-
-      <!-- Pagination -->
       <?php if ($totalPages > 1): ?>
         <div class="pagination">
-          <!-- Previous Page -->
           <?php if ($currentPage > 1): ?>
-            <a href="news.php?page=<?php echo $currentPage - 1; ?>" class="nav-button">← Previous</a>
+            <a href="news?page=<?php echo $currentPage - 1; ?>" class="nav-button">← Previous</a>
           <?php else: ?>
             <span class="nav-button disabled">← Previous</span>
           <?php endif; ?>
-
-          <!-- Page Numbers -->
           <?php
           $startPage = max(1, $currentPage - 2);
           $endPage = min($totalPages, $currentPage + 2);
 
           if ($startPage > 1): ?>
-            <a href="news.php?page=1">1</a>
+            <a href="news?page=1">1</a>
             <?php if ($startPage > 2): ?>
               <span>...</span>
             <?php endif;
@@ -479,7 +469,7 @@ if ($allNewsItems && $totalArticles > 0) {
             if ($i == $currentPage): ?>
               <span class="current"><?php echo $i; ?></span>
             <?php else: ?>
-              <a href="news.php?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+              <a href="news?page=<?php echo $i; ?>"><?php echo $i; ?></a>
             <?php endif;
           endfor;
 
@@ -487,12 +477,10 @@ if ($allNewsItems && $totalArticles > 0) {
             if ($endPage < $totalPages - 1): ?>
               <span>...</span>
             <?php endif; ?>
-            <a href="news.php?page=<?php echo $totalPages; ?>"><?php echo $totalPages; ?></a>
+            <a href="news?page=<?php echo $totalPages; ?>"><?php echo $totalPages; ?></a>
           <?php endif; ?>
-
-          <!-- Next Page -->
           <?php if ($currentPage < $totalPages): ?>
-            <a href="news.php?page=<?php echo $currentPage + 1; ?>" class="nav-button">Next →</a>
+            <a href="news?page=<?php echo $currentPage + 1; ?>" class="nav-button">Next →</a>
           <?php else: ?>
             <span class="nav-button disabled">Next →</span>
           <?php endif; ?>
@@ -502,14 +490,12 @@ if ($allNewsItems && $totalArticles > 0) {
       <div class="error-message">
         <h3>⚠️ Unable to Load Weather News</h3>
         <p>We're having trouble fetching the latest weather news at the moment. Please check your internet connection and try again later.</p>
-        <p><a href="news.php" class="refresh-button" style="margin-top: 15px;">🔄 Try Again</a></p>
+        <p><a href="news" class="refresh-button" style="margin-top: 15px;">🔄 Try Again</a></p>
       </div>
     <?php endif; ?>
-
-    <!-- Quick Load More for Next Page -->
     <?php if ($newsItems && count($newsItems) > 0 && $currentPage < $totalPages): ?>
       <div class="load-more-container">
-        <a href="news.php?page=<?php echo $currentPage + 1; ?>" class="load-more-button">
+        <a href="news?page=<?php echo $currentPage + 1; ?>" class="load-more-button">
           📰 Load More Articles (Page <?php echo $currentPage + 1; ?>)
         </a>
       </div>

@@ -1,5 +1,5 @@
 <?php
-// Load environment variables if needed
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,10 +23,9 @@
 </head>
 
 <body>
-    <!-- Header/Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #0d9488, #14b8a6);">
         <div class="container">
-            <a class="navbar-brand" href="index.php">
+            <a class="navbar-brand" href="home">
                 <i class="fas fa-cloud-sun-rain me-2"></i>
                 WeatherVoyager
             </a>
@@ -36,13 +35,13 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.php">Home</a>
+                        <a class="nav-link" href="home">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="news.php">Weather News</a>
+                        <a class="nav-link" href="news">Weather News</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="about.php">About</a>
+                        <a class="nav-link active" href="about">About</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="https://code-craft-website-solutions-2d68a0b57273.herokuapp.com/contact.php">Contact</a>
@@ -51,16 +50,12 @@
             </div>
         </div>
     </nav>
-
-    <!-- Hero Section -->
     <div class="py-5 text-center" style="background: linear-gradient(135deg, #1a1a1a, #2d2d2d); color: white;">
         <div class="container">
             <h1 class="display-4" style="color: #14b8a6;">About WeatherVoyager</h1>
             <p class="lead" style="color: #5eead4;">Learn more about our mission to help you find your perfect weather destination</p>
         </div>
     </div>
-
-    <!-- About Content -->
     <div class="container my-5">
         <div class="row">
             <div class="col-lg-8 mx-auto">
@@ -126,7 +121,7 @@
                             <p style="color: #5eead4; margin-bottom: 1rem;">This innovative weather destination platform was professionally designed and developed by Code Craft Website Solutions, specialists in creating cutting-edge web applications.</p>
                             <p style="color: white; margin-bottom: 1rem;">At Code Craft, we transform ideas into powerful digital solutions. From custom web applications to comprehensive business platforms, we craft websites that deliver exceptional user experiences.</p>
                             <div class="text-center">
-                                <a href="https://code-craft-website-solutions-2d68a0b57273.herokuapp.com/index.php" target="_blank" class="btn btn-lg px-4 py-2" style="background: linear-gradient(135deg, #14b8a6, #0d9488); color: white; text-decoration: none; border: none; border-radius: 25px;">
+                                <a href="https://code-craft-website-solutions-2d68a0b57273.herokuapp.com/home" target="_blank" class="btn btn-lg px-4 py-2" style="background: linear-gradient(135deg, #14b8a6, #0d9488); color: white; text-decoration: none; border: none; border-radius: 25px;">
                                     <i class="fas fa-external-link-alt me-2"></i>Visit Code Craft Website Solutions
                                 </a>
                             </div>
@@ -144,22 +139,20 @@
             </div>
         </div>
     </div>
-
-    <!-- Footer -->
     <footer class="py-4 mt-5" style="background: linear-gradient(135deg, #1a1a1a, #2d2d2d); color: white;">
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
                     <h5><i class="fas fa-cloud-sun-rain me-2" style="color: #14b8a6;"></i> WeatherVoyager</h5>
                     <p style="color: #5eead4;">Your perfect weather destination finder</p>
-                    <p style="color: #5eead4; font-size: 0.9em;">Created by <a href="https://code-craft-website-solutions-2d68a0b57273.herokuapp.com/index.php" target="_blank" style="color: #14b8a6; text-decoration: none;">Code Craft Website Solutions</a></p>
+                    <p style="color: #5eead4; font-size: 0.9em;">Created by <a href="https://code-craft-website-solutions-2d68a0b57273.herokuapp.com/home" target="_blank" style="color: #14b8a6; text-decoration: none;">Code Craft Website Solutions</a></p>
                 </div>
                 <div class="col-md-3">
                     <h5 style="color: #14b8a6;">Navigation</h5>
                     <ul class="list-unstyled">
-                        <li><a href="index.php" style="color: #5eead4; text-decoration: none;">Home</a></li>
-                        <li><a href="news.php" style="color: #5eead4; text-decoration: none;">Weather News</a></li>
-                        <li><a href="about.php" style="color: #5eead4; text-decoration: none;">About</a></li>
+                        <li><a href="home" style="color: #5eead4; text-decoration: none;">Home</a></li>
+                        <li><a href="news" style="color: #5eead4; text-decoration: none;">Weather News</a></li>
+                        <li><a href="about" style="color: #5eead4; text-decoration: none;">About</a></li>
                         <li><a href="https://code-craft-website-solutions-2d68a0b57273.herokuapp.com/contact.php" style="color: #5eead4; text-decoration: none;">Contact</a></li>
                     </ul>
                 </div>
@@ -177,8 +170,6 @@
             </div>
         </div>
     </footer>
-
-    <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

@@ -15,6 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $city = isset($_POST['city']) ? trim($_POST['city']) : '';
 $country = isset($_POST['country']) ? trim($_POST['country']) : '';
+$tempUnit = isset($_POST['temp_unit']) ? $_POST['temp_unit'] : 'celsius';
 
 if (empty($city) || empty($country)) {
     echo json_encode(['error' => 'City and country are required.']);
@@ -64,13 +65,21 @@ $currentWeather = [
     'precipitation' => isset($currentData['rain']) ? ($currentData['rain']['1h'] ?? 0) : 0
 ];
 
+// Apply temperature unit conversion
+if ($tempUnit === 'fahrenheit') {
+    $currentWeather['temp'] = round($currentWeather['temp'] * 9 / 5 + 32);
+    $currentWeather['temp_unit'] = '°F';
+} else {
+    $currentWeather['temp_unit'] = '°C';
+}
+
 // Process 5-day forecast
 $forecast = [];
 $processedDates = [];
 foreach ($forecastData['list'] as $forecastItem) {
     $date = date('Y-m-d', $forecastItem['dt']);
     if (!in_array($date, $processedDates) && count($processedDates) < 5) {
-        $forecast[] = [
+        $day = [
             'date' => $date,
             'temp_max' => round($forecastItem['main']['temp_max']),
             'temp_min' => round($forecastItem['main']['temp_min']),
@@ -78,6 +87,17 @@ foreach ($forecastData['list'] as $forecastItem) {
             'humidity' => $forecastItem['main']['humidity'],
             'wind_speed' => round($forecastItem['wind']['speed'] * 3.6, 1)
         ];
+
+        // Apply temperature unit conversion for forecast
+        if ($tempUnit === 'fahrenheit') {
+            $day['temp_min'] = round($day['temp_min'] * 9 / 5 + 32);
+            $day['temp_max'] = round($day['temp_max'] * 9 / 5 + 32);
+            $day['temp_unit'] = '°F';
+        } else {
+            $day['temp_unit'] = '°C';
+        }
+
+        $forecast[] = $day;
         $processedDates[] = $date;
     }
 }
@@ -88,7 +108,8 @@ $response = [
     'current' => $currentWeather,
     'forecast' => $forecast,
     'lat' => $lat,
-    'lon' => $lon
+    'lon' => $lon,
+    'temp_unit' => $tempUnit === 'fahrenheit' ? '°F' : '°C'
 ];
 
 echo json_encode($response);

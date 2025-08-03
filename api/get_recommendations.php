@@ -30,7 +30,6 @@ if ($tempUnit === 'fahrenheit') {
     $maxTemp = round(($maxTemp - 32) * 5 / 9);
 }
 
-$cityScores = [];
 $allCities = CITIES;
 
 $continentRanges = [
@@ -53,65 +52,103 @@ foreach ($selectedContinents as $continent) {
 $maxCitiesToProcess = 30;
 $citiesToProcess = array_slice($filteredCities, 0, $maxCitiesToProcess);
 
-foreach ($citiesToProcess as $cityInfo) {
+$mh = curl_multi_init();
+$handles = [];
+$citiesToProcessData = [];
+
+foreach ($citiesToProcess as $index => $cityInfo) {
     list($city, $country, $lat, $lon) = $cityInfo;
 
     $weatherUrl = OPENWEATHER_API_URL . "/weather?lat={$lat}&lon={$lon}&units=metric&appid=" . OPENWEATHER_API_KEY;
-    $currentResponse = file_get_contents($weatherUrl);
-    $currentData = json_decode($currentResponse, true);
-
-    if (!$currentData) {
-        continue;
-    }
-
-    $currentWeather = [
-        'temp' => round($currentData['main']['temp']),
-        'condition' => $currentData['weather'][0]['main'],
-        'description' => $currentData['weather'][0]['description'],
-        'humidity' => $currentData['main']['humidity'],
-        'wind_speed' => round($currentData['wind']['speed'] * 3.6, 1),
-        'precipitation' => isset($currentData['rain']) ? ($currentData['rain']['1h'] ?? 0) : 0
-    ];
-
-    if ($tempUnit === 'fahrenheit') {
-        $currentWeather['temp'] = round($currentWeather['temp'] * 9 / 5 + 32);
-        $currentWeather['temp_unit'] = '°F';
-    } else {
-        $currentWeather['temp_unit'] = '°C';
-    }
     $forecastUrl = OPENWEATHER_API_URL . "/forecast?lat={$lat}&lon={$lon}&units=metric&appid=" . OPENWEATHER_API_KEY;
-    $forecastResponse = file_get_contents($forecastUrl);
-    $forecastData = json_decode($forecastResponse, true);
 
-    if (!$forecastData) {
-        continue;
-    }
-    $forecast = [];
-    $processedDates = [];
-    foreach ($forecastData['list'] as $forecastItem) {
-        $date = date('Y-m-d', $forecastItem['dt']);
-        if (!in_array($date, $processedDates) && count($processedDates) < 5) {
-            $day = [
-                'date' => $date,
-                'temp_max' => round($forecastItem['main']['temp_max']),
-                'temp_min' => round($forecastItem['main']['temp_min']),
-                'condition' => $forecastItem['weather'][0]['main'],
-                'humidity' => $forecastItem['main']['humidity'],
-                'wind_speed' => round($forecastItem['wind']['speed'] * 3.6, 1),
-                'precipitation' => isset($forecastItem['rain']) ? ($forecastItem['rain']['3h'] ?? 0) : 0
-            ];
+    $weatherCh = curl_init($weatherUrl);
+    curl_setopt($weatherCh, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($weatherCh, CURLOPT_HEADER, 0);
+    curl_multi_add_handle($mh, $weatherCh);
 
-            if ($tempUnit === 'fahrenheit') {
-                $day['temp_min'] = round($day['temp_min'] * 9 / 5 + 32);
-                $day['temp_max'] = round($day['temp_max'] * 9 / 5 + 32);
-                $day['temp_unit'] = '°F';
-            } else {
-                $day['temp_unit'] = '°C';
-            }
+    $forecastCh = curl_init($forecastUrl);
+    curl_setopt($forecastCh, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($forecastCh, CURLOPT_HEADER, 0);
+    curl_multi_add_handle($mh, $forecastCh);
 
-            $forecast[] = $day;
-            $processedDates[] = $date;
+    $handles[$index] = ['weather' => $weatherCh, 'forecast' => $forecastCh];
+    $citiesToProcessData[$index] = $cityInfo;
+}
+
+$running = null;
+do {
+    curl_multi_exec($mh, $running);
+    curl_multi_select($mh);
+} while ($running > 0);
+
+$cityScores = [];
+
+foreach ($handles as $index => $handlePair) {
+    $currentResponse = curl_multi_getcontent($handlePair['weather']);
+    $forecastResponse = curl_multi_getcontent($handlePair['forecast']);
+
+    curl_multi_remove_handle($mh, $handlePair['weather']);
+    curl_close($handlePair['weather']);
+    curl_multi_remove_handle($mh, $handlePair['forecast']);
+    curl_close($handlePair['forecast']);
+
+    list($city, $country, $lat, $lon) = $citiesToProcessData[$index];
+
+    $currentData = $currentResponse ? json_decode($currentResponse, true) : null;
+    $forecastData = $forecastResponse ? json_decode($forecastResponse, true) : null;
+
+    $currentWeather = null;
+    if ($currentData && isset($currentData['main'])) {
+        $currentWeather = [
+            'temp' => round($currentData['main']['temp']),
+            'condition' => $currentData['weather'][0]['main'],
+            'description' => $currentData['weather'][0]['description'],
+            'humidity' => $currentData['main']['humidity'],
+            'wind_speed' => round($currentData['wind']['speed'] * 3.6, 1),
+            'precipitation' => isset($currentData['rain']) ? ($currentData['rain']['1h'] ?? 0) : 0
+        ];
+
+        if ($tempUnit === 'fahrenheit') {
+            $currentWeather['temp'] = round($currentWeather['temp'] * 9 / 5 + 32);
+            $currentWeather['temp_unit'] = '°F';
+        } else {
+            $currentWeather['temp_unit'] = '°C';
         }
+    }
+
+    $forecast = [];
+    if ($forecastData && isset($forecastData['list'])) {
+        $processedDates = [];
+        foreach ($forecastData['list'] as $forecastItem) {
+            $date = date('Y-m-d', $forecastItem['dt']);
+            if (!in_array($date, $processedDates) && count($processedDates) < 5) {
+                $day = [
+                    'date' => $date,
+                    'temp_max' => round($forecastItem['main']['temp_max']),
+                    'temp_min' => round($forecastItem['main']['temp_min']),
+                    'condition' => $forecastItem['weather'][0]['main'],
+                    'humidity' => $forecastItem['main']['humidity'],
+                    'wind_speed' => round($forecastItem['wind']['speed'] * 3.6, 1),
+                    'precipitation' => isset($forecastItem['rain']) ? ($forecastItem['rain']['3h'] ?? 0) : 0
+                ];
+
+                if ($tempUnit === 'fahrenheit') {
+                    $day['temp_min'] = round($day['temp_min'] * 9 / 5 + 32);
+                    $day['temp_max'] = round($day['temp_max'] * 9 / 5 + 32);
+                    $day['temp_unit'] = '°F';
+                } else {
+                    $day['temp_unit'] = '°C';
+                }
+
+                $forecast[] = $day;
+                $processedDates[] = $date;
+            }
+        }
+    }
+
+    if ($currentWeather === null) {
+        continue;
     }
 
     $matchScore = calculateMatchScore($currentWeather, $forecast, $preferences, $minTemp, $maxTemp);
@@ -123,23 +160,29 @@ foreach ($citiesToProcess as $cityInfo) {
         'lng' => $lon,
         'current' => $currentWeather,
         'forecast' => $forecast,
-        'match_score' => $matchScore
+        'match_score' => $matchScore,
+        'temp_unit' => $tempUnit === 'fahrenheit' ? '°F' : '°C'
     ];
 }
+
+curl_multi_close($mh);
 
 usort($cityScores, function ($a, $b) {
     return $b['match_score'] <=> $a['match_score'];
 });
-echo json_encode(array_slice($cityScores, 0, 12));
+
+$results = array_slice($cityScores, 0, 12);
+
+echo json_encode(['destinations' => $results]);
 exit;
 
 /**
- * @param array 
- * @param array 
- * @param array 
- * @param int 
- * @param int 
- * @return int 
+ * @param array $currentWeather
+ * @param array $forecast
+ * @param array $preferences
+ * @param int $minTemp
+ * @param int $maxTemp
+ * @return int
  */
 function calculateMatchScore($currentWeather, $forecast, $preferences, $minTemp, $maxTemp)
 {
@@ -160,7 +203,6 @@ function calculateMatchScore($currentWeather, $forecast, $preferences, $minTemp,
         switch ($pref) {
             case 'sunny':
                 if (
-                    stripos($currentWeather['condition'], 'clear') !== false ||
                     stripos($currentWeather['condition'], 'sun') !== false
                 ) {
                     $score += 10;
@@ -181,17 +223,22 @@ function calculateMatchScore($currentWeather, $forecast, $preferences, $minTemp,
                 if ($currentWeather['humidity'] < 50) {
                     $score += 10;
                 } else if ($currentWeather['humidity'] < 70) {
-                    $score += 5; 
+                    $score += 5;
                 }
                 break;
 
             case 'no_rain':
                 $hasRain = stripos($currentWeather['condition'], 'rain') !== false ||
-                    stripos($currentWeather['condition'], 'drizzle') !== false;
+                    stripos($currentWeather['condition'], 'drizzle') !== false ||
+                    stripos($currentWeather['condition'], 'snow') !== false;
 
                 $forecastRain = false;
                 foreach ($forecast as $day) {
-                    if (stripos($day['condition'], 'rain') !== false || $day['precipitation'] > 1) {
+                    if (
+                        stripos($day['condition'], 'rain') !== false ||
+                        stripos($day['condition'], 'drizzle') !== false ||
+                        stripos($day['condition'], 'snow') !== false
+                    ) {
                         $forecastRain = true;
                         break;
                     }
@@ -214,9 +261,7 @@ function calculateMatchScore($currentWeather, $forecast, $preferences, $minTemp,
 
             case 'clear_sky':
                 if (
-                    stripos($currentWeather['condition'], 'clear') !== false ||
-                    (stripos($currentWeather['condition'], 'cloud') !== false &&
-                        stripos($currentWeather['condition'], 'partly') !== false)
+                    stripos($currentWeather['condition'], 'clear') !== false
                 ) {
                     $score += 10;
                 } else if (stripos($currentWeather['condition'], 'cloud') === false) {
@@ -254,5 +299,8 @@ function calculateMatchScore($currentWeather, $forecast, $preferences, $minTemp,
             $score += 30;
         }
     }
+
+    if ($maxPossibleScore == 0) return 0;
+
     return min(100, round(($score / $maxPossibleScore) * 100));
 }
