@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: weathervoyager
+    env: docker
+    plan: free
+    envVars:
+      - key: OPENWEATHER_API_KEY
+        sync: false
+      - key: PEXELS_API_KEY
+        sync: false
