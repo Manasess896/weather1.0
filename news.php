@@ -1,7 +1,5 @@
 <?php
 require_once 'includes/config.php';
-
-// Pagination settings
 $articlesPerPage = 12;
 $currentPage = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
 $offset = ($currentPage - 1) * $articlesPerPage;
@@ -9,10 +7,7 @@ $offset = ($currentPage - 1) * $articlesPerPage;
 function fetchWeatherNews($extended = false)
 {
   $rssUrl = "https://news.google.com/rss/search?q=weather&hl=en&gl=US&ceid=US:en";
-
-  // For extended results, we can try different RSS endpoints or parameters
   if ($extended) {
-    // Add more comprehensive search terms for extended results
     $searchTerms = ['weather', 'climate', 'forecast', 'meteorology', 'storm', 'hurricane', 'temperature'];
     $allItems = [];
 
@@ -20,7 +15,6 @@ function fetchWeatherNews($extended = false)
       $extendedUrl = "https://news.google.com/rss/search?q=" . urlencode($term) . "&hl=en&gl=US&ceid=US:en";
       $items = fetchSingleRssFeed($extendedUrl);
       if ($items) {
-        // Convert SimpleXMLElement to array for merging
         $itemsArray = [];
         foreach ($items as $item) {
           $itemsArray[] = $item;
@@ -29,7 +23,6 @@ function fetchWeatherNews($extended = false)
       }
     }
 
-    // Remove duplicates based on title similarity
     $uniqueItems = [];
     $seenTitles = [];
 
@@ -45,8 +38,6 @@ function fetchWeatherNews($extended = false)
 
     return $uniqueItems;
   }
-
-  // For non-extended results, convert SimpleXMLElement to array
   $singleFeedItems = fetchSingleRssFeed($rssUrl);
   if ($singleFeedItems) {
     $itemsArray = [];
@@ -88,12 +79,9 @@ function fetchSingleRssFeed($rssUrl)
   }
 }
 
-// Fetch extended news for pagination
 $allNewsItems = fetchWeatherNews(true);
 $totalArticles = $allNewsItems ? count($allNewsItems) : 0;
 $totalPages = ceil($totalArticles / $articlesPerPage);
-
-// Get items for current page
 $newsItems = false;
 if ($allNewsItems && $totalArticles > 0) {
   $newsItems = array_slice($allNewsItems, $offset, $articlesPerPage);
@@ -108,6 +96,7 @@ if ($allNewsItems && $totalArticles > 0) {
   <title>Weather News | Weather App</title>
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/style-fixes.css">
+  <link rel="stylesheet" href="css/extreme-weather.css">
   <style>
     .news-container {
       max-width: 1200px;

@@ -1,3 +1,39 @@
+/* Weather .btn-check:checked + .preference-tab,
+.preference-tab.active {
+  background: var(--pure-white) !important;
+  color: var(--primary-black) !important;
+  border-color: var(--pure-white) !important;
+  box-shadow: 0 4px 16px rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}ces Tab Style */
+.preference-tab {
+  border-radius: 8px !important;
+  border: 2px solid var(--teal-primary) !important;
+  background: #1a1a1a !important;
+  color: #5eead4 !important;
+  font-weight: 500;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.2s;
+  box-shadow: 0 2px 8px rgba(20, 184, 166, 0.08);
+  cursor: pointer;
+}
+.btn-check:checked + .preference-tab,
+.preference-tab.active {
+  background: var(--teal-primary) !important;
+  color: #fff !important;
+  border-color: var(--teal-primary) !important;
+  box-shadow: 0 4px 16px rgba(20, 184, 166, 0.25);
+  transform: translateY(-2px);
+}
+.preference-tab:focus {
+  outline: 2px solid var(--teal-primary);
+  outline-offset: 2px;
+}
+
+.btn-check:checked + .btn.btn-outline-primary {
+  background-color: var(--bs-primary) !important;
+  color: white !important;
+  border-color: var(--bs-primary) !important;
+}
 
 .destination-card {
   padding: 0 !important;
@@ -14,7 +50,6 @@
   padding: 0.75rem 1rem !important;
 }
 
-/* Ensure icons are always visible */
 .custom-checkbox-label i,
 .form-check-label i {
   opacity: 1 !important;
@@ -32,7 +67,6 @@ button,
   color: var(--teal-primary);
 }
 
-
 body {
   background: black;
 }
@@ -48,7 +82,11 @@ body {
   font-size: 2.5rem !important;
   font-weight: 700;
   color: var(--green-primary);
-  background: linear-gradient(135deg, var(--green-primary) 0%, var(--green-secondary) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--green-primary) 0%,
+    var(--green-secondary) 100%
+  );
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -121,44 +159,9 @@ body {
 }
 
 
-.activities-container {
-  padding: 0.75rem !important;
-  margin-top: 1rem !important;
-}
-
-.activities-container h6 {
-  font-size: 0.9rem !important;
-  margin-bottom: 0.5rem !important;
-}
-
-.activities-container ul {
-  margin-left: 0.5rem !important;
-  padding-left: 0.75rem !important;
-}
-
-.activities-container li {
-  font-size: 0.85rem !important;
-  margin-bottom: 0.25rem !important;
-  list-style-type: disc;
-}
-
-
 .match-score-title {
   font-size: 0.9rem;
   margin-bottom: 0.3rem;
 }
 
-.travel-advice-container {
-  padding: 0.75rem !important;
-  margin-top: 0.75rem !important;
-}
 
-.travel-advice-container h6 {
-  font-size: 0.9rem !important;
-  margin-bottom: 0.3rem !important;
-}
-
-.travel-advice-container p {
-  font-size: 0.85rem !important;
-  margin-bottom: 0 !important;
-}

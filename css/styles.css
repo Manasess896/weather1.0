@@ -1004,7 +1004,7 @@ button:focus, .btn:focus {
     -webkit-align-items: center;
     -ms-flex-align: center;
     align-items: center;
-}
+/* }
 @supports not (display: grid) {
     .row {
         display: -webkit-box;
@@ -1024,7 +1024,7 @@ button:focus, .btn:focus {
         min-height: 1px;
         padding-left: 15px;
         padding-right: 15px;
-    }
+    } */
 }
 .btn {
     display: inline-block;

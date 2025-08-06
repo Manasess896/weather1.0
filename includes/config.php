@@ -19,6 +19,15 @@ function defineOpenWeatherApiKey()
   } else {
     error_log("OPENWEATHER_API_KEY is not set.");
   }
+
+  $mapKey = $_ENV['OPENWEATHERMAPAPI_KEY'] ?? getenv('OPENWEATHERMAPAPI_KEY');
+  if ($mapKey) {
+    if (!defined('OPENWEATHERMAPAPI_KEY')) {
+      define('OPENWEATHERMAPAPI_KEY', $mapKey);
+    }
+  } else {
+    error_log("OPENWEATHERMAPAPI_KEY is not set.");
+  }
 }
 
 function definePexelsApiKey()

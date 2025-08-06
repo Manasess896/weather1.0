@@ -21,6 +21,7 @@
   <!-- css -->
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/style-fixes.css">
+  <link rel="stylesheet" href="css/extreme-weather.css">
 </head>
 
 <body>
@@ -68,81 +69,71 @@
           <div class="card-body" style="padding: 2rem;">
             <h2 class="card-title text-center mb-4" style="color: #14b8a6;">What's your ideal weather?</h2>
             <form id="weather-form" method="POST" action="api/recommendations">
-              <div class="mb-4">
-                <h5 class="form-label" style="color: #14b8a6;">Your Weather Preferences</h5>
-                <div class="row g-2">
-                  <div class="col-6 col-md-4">
-                    <input type="checkbox" class="btn-check" id="sunny" name="preferences[]" value="sunny" autocomplete="off">
-                    <label class="btn btn-outline-light w-100" for="sunny"><i class="fas fa-sun me-2"></i>Sunny</label>
-                  </div>
-                  <div class="col-6 col-md-4">
-                    <input type="checkbox" class="btn-check" id="cool_breeze" name="preferences[]" value="cool_breeze" autocomplete="off">
-                    <label class="btn btn-outline-light w-100" for="cool_breeze"><i class="fas fa-wind me-2"></i>Cool Breeze</label>
-                  </div>
-                  <div class="col-6 col-md-4">
-                    <input type="checkbox" class="btn-check" id="low_humidity" name="preferences[]" value="low_humidity" autocomplete="off">
-                    <label class="btn btn-outline-light w-100" for="low_humidity"><i class="fas fa-water me-2"></i>Low Humidity</label>
-                  </div>
-                  <div class="col-6 col-md-4">
-                    <input type="checkbox" class="btn-check" id="no_rain" name="preferences[]" value="no_rain" autocomplete="off">
-                    <label class="btn btn-outline-light w-100" for="no_rain"><i class="fas fa-cloud-rain me-2"></i>No Rain</label>
-                  </div>
-                  <div class="col-6 col-md-4">
-                    <input type="checkbox" class="btn-check" id="moderate_temp" name="preferences[]" value="moderate_temp" autocomplete="off">
-                    <label class="btn btn-outline-light w-100" for="moderate_temp"><i class="fas fa-temperature-low me-2"></i>Moderate Temp</label>
-                  </div>
-                  <div class="col-6 col-md-4">
-                    <input type="checkbox" class="btn-check" id="clear_sky" name="preferences[]" value="clear_sky" autocomplete="off">
-                    <label class="btn btn-outline-light w-100" for="clear_sky"><i class="fas fa-cloud-sun me-2"></i>Clear Sky</label>
-                  </div>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="min_temp" class="form-label" style="color: #5eead4;">Min Temperature <span id="min-temp-unit">(°C)</span></label>
+                  <input type="number" class="form-control" id="min_temp" name="min_temp" value="15">
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="max_temp" class="form-label" style="color: #5eead4;">Max Temperature <span id="max-temp-unit">(°C)</span></label>
+                  <input type="number" class="form-control" id="max_temp" name="max_temp" value="30">
                 </div>
               </div>
-
-              <div class="mb-4">
-                <h5 class="form-label" style="color: #14b8a6;">Temperature Range (°C)</h5>
-                <div class="row">
-                  <div class="col">
-                    <input type="number" class="form-control" id="min_temp" name="min_temp" placeholder="Min" value="15" style="background: #2d2d2d; border: 1px solid #14b8a6; color: white;">
-                  </div>
-                  <div class="col">
-                    <input type="number" class="form-control" id="max_temp" name="max_temp" placeholder="Max" value="30" style="background: #2d2d2d; border: 1px solid #14b8a6; color: white;">
-                  </div>
+              <div class="mb-3">
+                <label class="form-label" style="color: #5eead4;">Temperature Unit</label>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="temp_unit" id="celsius" value="celsius" checked>
+                  <label class="form-check-label" for="celsius" style="color: white;">Celsius (°C)</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="temp_unit" id="fahrenheit" value="fahrenheit">
+                  <label class="form-check-label" for="fahrenheit" style="color: white;">Fahrenheit (°F)</label>
                 </div>
               </div>
-
-              <div class="mb-4">
-                <h5 class="form-label" style="color: #14b8a6;">Continents</h5>
-                <div class="row g-2">
-                  <div class="col-6 col-md-4">
-                    <input type="checkbox" class="btn-check" id="europe" name="continents[]" value="europe" autocomplete="off">
-                    <label class="btn btn-outline-light w-100" for="europe"><i class="fas fa-landmark me-2"></i>Europe</label>
-                  </div>
-                  <div class="col-6 col-md-4">
-                    <input type="checkbox" class="btn-check" id="north_america" name="continents[]" value="north_america" autocomplete="off">
-                    <label class="btn btn-outline-light w-100" for="north_america"><i class="fas fa-mountain me-2"></i>North America</label>
-                  </div>
-                  <div class="col-6 col-md-4">
-                    <input type="checkbox" class="btn-check" id="asia" name="continents[]" value="asia" autocomplete="off">
-                    <label class="btn btn-outline-light w-100" for="asia"><i class="fas fa-torii-gate me-2"></i>Asia</label>
-                  </div>
-                  <div class="col-6 col-md-4">
-                    <input type="checkbox" class="btn-check" id="australia_oceania" name="continents[]" value="australia_oceania" autocomplete="off">
-                    <label class="btn btn-outline-light w-100" for="australia_oceania"><i class="fas fa-water me-2"></i>Australia & Oceania</label>
-                  </div>
-                  <div class="col-6 col-md-4">
-                    <input type="checkbox" class="btn-check" id="africa" name="continents[]" value="africa" autocomplete="off">
-                    <label class="btn btn-outline-light w-100" for="africa"><i class="fas fa-tree me-2"></i>Africa</label>
-                  </div>
-                  <div class="col-6 col-md-4">
-                    <input type="checkbox" class="btn-check" id="south_central_america" name="continents[]" value="south_central_america" autocomplete="off">
-                    <label class="btn btn-outline-light w-100" for="south_central_america"><i class="fas fa-drum me-2"></i>South & Central America</label>
-                  </div>
+              <div class="mb-3">
+                <label class="form-label" style="color: #5eead4;">Weather Preferences</label>
+                <div class="d-flex flex-wrap gap-2" id="weather-preferences-tabs">
+                  <?php
+                  $preferences = [
+                    'hot-dry' => ['label' => 'Hot and Dry', 'icon' => 'fa-thermometer-full', 'hint' => 'Temperature range: 28–40°C (82–104°F), Low humidity, No rain'],
+                    'warm-sunny' => ['label' => 'Warm and Sunny', 'icon' => 'fa-sun', 'hint' => 'Temperature range: 21–28°C (70–82°F), Low humidity, No rain'],
+                    'cold-snowy' => ['label' => 'Cold and Snowy', 'icon' => 'fa-snowflake', 'hint' => 'Temperature range: -10–5°C (14–41°F), High humidity, Snow'],
+                    'mild-rainy' => ['label' => 'Mild and Rainy', 'icon' => 'fa-cloud-showers-heavy', 'hint' => 'Temperature range: 15–25°C (59–77°F), High humidity, Rain'],
+                    'cool-humid' => ['label' => 'Cool and Humid', 'icon' => 'fa-tint', 'hint' => 'Temperature range: 10–20°C (50–68°F), High humidity, Occasional rain'],
+                    'balanced' => ['label' => 'Balanced', 'icon' => 'fa-thermometer-half', 'hint' => 'Temperature range: 18–28°C (64–82°F), Moderate humidity, Occasional rain'],
+                  ];
+                  foreach ($preferences as $key => $details) {
+                    echo '<input type="checkbox" class="btn-check" name="preferences[]" value="' . $key . '" id="tab-' . $key . '" autocomplete="off">';
+                    echo '<label class="btn btn-outline-info preference-tab mb-1" for="tab-' . $key . '" title="' . $details['hint'] . '"><i class="fas ' . $details['icon'] . ' me-2"></i>' . $details['label'] . '</label>';
+                  }
+                  ?>
                 </div>
               </div>
-
+              <div class="mb-4">
+                <label class="form-label" style="color: #5eead4;">Continents</label>
+                <div class="d-flex flex-wrap gap-2">
+                  <?php
+                  $continents = [
+                    'europe' => 'Europe',
+                    'north_america' => 'North America',
+                    'asia' => 'Asia',
+                    'australia_oceania' => 'Australia/Oceania',
+                    'africa' => 'Africa',
+                    'south_central_america' => 'South/Central America'
+                  ];
+                  foreach ($continents as $key => $label) {
+                    echo '<input type="checkbox" class="btn-check" name="continents[]" value="' . $key . '" id="continent-' . $key . '" autocomplete="off">';
+                    echo '<label class="btn btn-outline-primary preference-tab mb-1" for="continent-' . $key . '">' . $label . '</label>';
+                  }
+                  ?>
+                </div>
+              </div>
               <div class="text-center mt-4">
-                <button type="submit" class="btn btn-primary btn-lg px-5" style="background: linear-gradient(135deg, #14b8a6, #0d9488); border: none; color: white; border-radius: 25px;">
-                  <i class="fas fa-search me-2"></i> Find My Destinations
+                <button type="submit" class="btn btn-primary btn-lg" style="background-color: #14b8a6; border-color: #14b8a6;">
+                  <i class="fas fa-search me-2"></i>Find My Destination
+                </button>
+                <button type="button" id="clear-preferences-btn" class="btn btn-secondary btn-lg">
+                  <i class="fas fa-times-circle me-2"></i>Clear
                 </button>
               </div>
             </form>
@@ -211,14 +202,334 @@
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
     crossorigin=""></script>
 
+  <script src="js/weather-rules.js"></script>
   <script src="js/ui.js"></script>
   <script src="js/favorites.js"></script>
   <script src="js/map.js"></script>
   <script src="js/main.js"></script>
+
+  <script>
+    $(document).ready(function() {
+      if ($('#min-temp-feedback').length === 0) {
+        $('#min_temp').after('<small class="text-muted" id="min-temp-feedback" style="color: #94a3b8 !important;"></small>');
+      }
+      if ($('#max-temp-feedback').length === 0) {
+        $('#max_temp').after('<small class="text-muted" id="max-temp-feedback" style="color: #94a3b8 !important;"></small>');
+      }
+
+      function updateFeedback() {
+        const selectedUnit = $('input[name="temp_unit"]:checked').val();
+        const minTemp = parseFloat($('#min_temp').val()) || 0;
+        const maxTemp = parseFloat($('#max_temp').val()) || 0;
+        const minFeedback = $('#min-temp-feedback');
+        const maxFeedback = $('#max-temp-feedback');
+        if (selectedUnit === 'celsius') {
+          const minF = celsiusToFahrenheit(minTemp);
+          const maxF = celsiusToFahrenheit(maxTemp);
+          minFeedback.text(`= ${minF}°F`);
+          maxFeedback.text(`= ${maxF}°F`);
+        } else {
+          const minC = fahrenheitToCelsius(minTemp);
+          const maxC = fahrenheitToCelsius(maxTemp);
+          minFeedback.text(`= ${minC}°C`);
+          maxFeedback.text(`= ${maxC}°C`);
+        }
+      }
+
+      function setTempInputsForPreference(preference) {
+        const selectedUnit = $('input[name="temp_unit"]:checked').val();
+        const range = WeatherRulesUtils.getTemperatureRange(preference, selectedUnit);
+        const minInput = $('#min_temp');
+        const maxInput = $('#max_temp');
+        minInput.attr('min', range.min);
+        minInput.attr('max', range.max);
+        maxInput.attr('min', range.min);
+        maxInput.attr('max', range.max);
+        minInput.val(range.min);
+        maxInput.val(range.max);
+        minInput.attr('placeholder', `${range.min}° to ${range.max}°`);
+        maxInput.attr('placeholder', `${range.min}° to ${range.max}°`);
+        updateFeedback();
+      }
+      function resetTempInputs() {
+        const selectedUnit = $('input[name="temp_unit"]:checked').val();
+        const defaultRange = WeatherRulesUtils.getTemperatureRange('default', selectedUnit);
+        const minInput = $('#min_temp');
+        const maxInput = $('#max_temp');
+        minInput.attr('min', defaultRange.min);
+        minInput.attr('max', defaultRange.max);
+        maxInput.attr('min', defaultRange.min);
+        maxInput.attr('max', defaultRange.max);
+        minInput.val(15);
+        maxInput.val(30);
+        minInput.attr('placeholder', '');
+        maxInput.attr('placeholder', '');
+        updateFeedback();
+      }
+      function validateTemperatureRanges() {
+        const selectedPreferences = $('input[name="preferences[]"]:checked').map(function() {
+          return $(this).val();
+        }).get();
+        const selectedUnit = $('input[name="temp_unit"]:checked').val();
+        const minTempInput = $('#min_temp');
+        const maxTempInput = $('#max_temp');
+        const minTemp = parseFloat(minTempInput.val()) || 0;
+        const maxTemp = parseFloat(maxTempInput.val()) || 0;
+        const validation = WeatherRulesUtils.validateTemperatures(minTemp, maxTemp, selectedPreferences, selectedUnit);
+        return validation;
+      }
+      function autoAdjustTemperature(preference) {
+        const selectedUnit = $('input[name="temp_unit"]:checked').val();
+        const adjustment = WeatherRulesUtils.getAutoAdjustment(preference, selectedUnit);
+        if (!adjustment) return;
+        const minTempInput = $('#min_temp');
+        const maxTempInput = $('#max_temp');
+        const currentMin = parseFloat(minTempInput.val()) || 0;
+        const currentMax = parseFloat(maxTempInput.val()) || 0;
+        const suggestedMin = adjustment.min;
+        const suggestedMax = adjustment.max;
+        let needsAdjustment = false;
+        let adjustmentMessage = '';
+        const range = WeatherRulesUtils.getTemperatureRange(preference, selectedUnit);
+        if (preference === 'hot-dry' && (currentMin < range.min || currentMax < range.min)) {
+          needsAdjustment = true;
+          adjustmentMessage = `For "Hot and Dry" weather, we recommend temperatures between ${suggestedMin}°${selectedUnit.charAt(0).toUpperCase()} and ${suggestedMax}°${selectedUnit.charAt(0).toUpperCase()}.`;
+        } else if (preference === 'warm-sunny' && (currentMin < range.min || currentMax < range.min)) {
+          needsAdjustment = true;
+          adjustmentMessage = `For "Warm and Sunny" weather, we recommend temperatures between ${suggestedMin}°${selectedUnit.charAt(0).toUpperCase()} and ${suggestedMax}°${selectedUnit.charAt(0).toUpperCase()}.`;
+        } else if (preference === 'cold-snowy' && (currentMin > range.max || currentMax > range.max)) {
+          needsAdjustment = true;
+          adjustmentMessage = `For "Cold and Snowy" weather, we recommend temperatures between ${suggestedMin}°${selectedUnit.charAt(0).toUpperCase()} and ${suggestedMax}°${selectedUnit.charAt(0).toUpperCase()}.`;
+        } else if (preference === 'mild-rainy' && (currentMin < range.min || currentMax > range.max)) {
+          needsAdjustment = true;
+          adjustmentMessage = `For "Mild and Rainy" weather, we recommend temperatures between ${suggestedMin}°${selectedUnit.charAt(0).toUpperCase()} and ${suggestedMax}°${selectedUnit.charAt(0).toUpperCase()}.`;
+        } else if (preference === 'cool-humid' && (currentMin < range.min || currentMax > range.max)) {
+          needsAdjustment = true;
+          adjustmentMessage = `For "Cool and Humid" weather, we recommend temperatures between ${suggestedMin}°${selectedUnit.charAt(0).toUpperCase()} and ${suggestedMax}°${selectedUnit.charAt(0).toUpperCase()}.`;
+        } else if (preference === 'balanced' && (currentMin < range.min || currentMax > range.max)) {
+          needsAdjustment = true;
+          adjustmentMessage = `For "Balanced" weather, we recommend temperatures between ${suggestedMin}°${selectedUnit.charAt(0).toUpperCase()} and ${suggestedMax}°${selectedUnit.charAt(0).toUpperCase()}.`;
+        }
+
+        if (needsAdjustment) {
+          Swal.fire({
+            title: 'Temperature Adjustment Suggested',
+            text: adjustmentMessage + ' Would you like to adjust automatically?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, Adjust',
+            cancelButtonText: 'Keep Current',
+            confirmButtonColor: '#14b8a6',
+            cancelButtonColor: '#6c757d'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              minTempInput.val(suggestedMin);
+              maxTempInput.val(suggestedMax);
+              updateFeedback();
+
+              Swal.fire({
+                title: 'Temperatures Adjusted!',
+                text: `Temperature range set to ${suggestedMin}°${selectedUnit.charAt(0).toUpperCase()} - ${suggestedMax}°${selectedUnit.charAt(0).toUpperCase()}`,
+                icon: 'success',
+                confirmButtonColor: '#14b8a6',
+                timer: 2000
+              });
+            }
+          });
+        }
+      }
+      function checkConflictingPreferences(changedPreference) {
+        const conflicts = WeatherRulesUtils.getConflicts(changedPreference);
+        const conflictingSelected = [];
+        conflicts.forEach(conflictPref => {
+          if ($(`#tab-${conflictPref}`).is(':checked')) {
+            conflictingSelected.push(conflictPref);
+          }
+        });
+        if (conflictingSelected.length > 0) {
+          conflictingSelected.forEach(pref => {
+            $(`#tab-${pref}`).prop('checked', false);
+          });
+          const conflictNames = conflictingSelected.map(pref => {
+            return $(`label[for="tab-${pref}"]`).text().trim();
+          });
+          Swal.fire({
+            title: 'Preference Conflict Resolved',
+            text: `"${$(`label[for="tab-${changedPreference}"]`).text().trim()}" conflicts with "${conflictNames.join(', ')}". The conflicting preferences have been automatically removed.`,
+            icon: 'info',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#14b8a6'
+          });
+        }
+        setTimeout(() => {
+          autoAdjustTemperature(changedPreference);
+        }, 100);
+      }
+      function showTemperatureValidation() {
+        const validation = validateTemperatureRanges();
+
+        if (validation.errors.length > 0) {
+          Swal.fire({
+            title: 'Temperature Configuration Error',
+            html: validation.errors.join('<br><br>'),
+            icon: 'error',
+            confirmButtonText: 'Fix Settings',
+            confirmButtonColor: '#dc3545'
+          });
+          return false;
+        }
+
+        if (validation.warnings.length > 0) {
+          Swal.fire({
+            title: 'Temperature Recommendations',
+            html: validation.warnings.join('<br><br>'),
+            icon: 'warning',
+            confirmButtonText: 'Got it',
+            confirmButtonColor: '#14b8a6'
+          });
+        }
+
+        return true;
+      }
+
+      function celsiusToFahrenheit(c) {
+      
+        if (typeof c !== 'number' || isNaN(c)) return '';
+        return Math.round((c * 9 / 5 + 32) * 100) / 100;
+      }
+
+      function fahrenheitToCelsius(f) {
+   
+        if (typeof f !== 'number' || isNaN(f)) return '';
+        return Math.round(((f - 32) * 5 / 9) * 100) / 100;
+      }
+
+      $('input[name="preferences[]"]').on('change', function() {
+        const checked = $(this).is(':checked');
+        const pref = $(this).val();
+        if (checked) {
+
+          $('input[name="preferences[]"]').not(this).prop('checked', false).prop('disabled', true);
+          setTempInputsForPreference(pref);
+        } else {
+
+          $('input[name="preferences[]"]').prop('disabled', false);
+          resetTempInputs();
+        }
+      });
+
+      $('input[name="temp_unit"]').on('change', function() {
+        const selectedUnit = $(this).val();
+        const minTempInput = $('#min_temp');
+        const maxTempInput = $('#max_temp');
+        const minTempUnit = $('#min-temp-unit');
+        const maxTempUnit = $('#max-temp-unit');
+
+        let currentMinTemp = parseFloat(minTempInput.val());
+        let currentMaxTemp = parseFloat(maxTempInput.val());
+        let currentUnit = minTempInput.attr('data-unit') || 'celsius';
+
+        if (selectedUnit === 'fahrenheit' && currentUnit !== 'fahrenheit') {
+  
+          minTempInput.val(celsiusToFahrenheit(currentMinTemp)).attr('data-unit', 'fahrenheit');
+          maxTempInput.val(celsiusToFahrenheit(currentMaxTemp)).attr('data-unit', 'fahrenheit');
+          minTempUnit.text('(°F)');
+          maxTempUnit.text('(°F)');
+        } else if (selectedUnit === 'celsius' && currentUnit !== 'celsius') {
+          minTempInput.val(fahrenheitToCelsius(currentMinTemp)).attr('data-unit', 'celsius');
+          maxTempInput.val(fahrenheitToCelsius(currentMaxTemp)).attr('data-unit', 'celsius');
+          minTempUnit.text('(°C)');
+          maxTempUnit.text('(°C)');
+        }
+        updateFeedback();
+        setTimeout(() => {
+          showTemperatureValidation();
+        }, 300);
+      });
+
+      $('#min_temp, #max_temp').on('input', function() {
+        updateFeedback();
+      });
+
+      $('#min_temp, #max_temp').on('blur', function() {
+        setTimeout(() => {
+          showTemperatureValidation();
+        }, 300);
+      });
+
+      $('#weather-form').on('submit', function(e) {
+        const validation = validateTemperatureRanges();
+        const minTemp = parseFloat($('#min_temp').val()) || 0;
+        const maxTemp = parseFloat($('#max_temp').val()) || 0;
+
+        if (validation.errors.length > 0) {
+          e.preventDefault();
+          Swal.fire({
+            title: 'Cannot Submit - Configuration Errors',
+            html: validation.errors.join('<br><br>'),
+            icon: 'error',
+            confirmButtonText: 'Fix Settings',
+            confirmButtonColor: '#dc3545'
+          });
+          return;
+        }
+
+        if (minTemp >= maxTemp) {
+          e.preventDefault();
+          Swal.fire({
+            title: 'Temperature Range Error',
+            text: 'Minimum temperature must be lower than maximum temperature.',
+            icon: 'error',
+            confirmButtonColor: '#dc3545'
+          });
+          return;
+        }
+        if (validation.warnings.length > 0) {
+          e.preventDefault();
+          Swal.fire({
+            title: 'Temperature Recommendations',
+            html: validation.warnings.join('<br><br>') + '<br><br>Do you want to continue anyway?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Continue',
+            cancelButtonText: 'Adjust Settings',
+            confirmButtonColor: '#14b8a6',
+            cancelButtonColor: '#6c757d'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              $(this).off('submit').submit();
+            }
+          });
+        }
+      });
+      $('#clear-preferences-btn').on('click', function() {
+        $('input[name="preferences[]"]').prop('checked', false).prop('disabled', false);
+        $('input[name="continents[]"]').prop('checked', false);
+        resetTempInputs();
+        $('#celsius').prop('checked', true);
+        $('#fahrenheit').prop('checked', false);
+        $('#min-temp-unit').text('(°C)');
+        $('#max-temp-unit').text('(°C)');
+        $('#min_temp, #max_temp').attr('data-unit', 'celsius');
+        Swal.fire({
+          title: 'Preferences Cleared',
+          text: 'All preferences and settings have been reset to defaults.',
+          icon: 'success',
+          confirmButtonColor: '#14b8a6',
+          timer: 1500
+        });
+      });
+      $('#min_temp, #max_temp').attr('data-unit', 'celsius');
+      updateFeedback();
+    });
+  </script>
 </body>
 
 </html>

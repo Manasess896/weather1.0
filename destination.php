@@ -14,39 +14,6 @@ function getWeatherIconClass($condition)
   return 'fas fa-cloud-sun text-secondary';
 }
 
-function getSuggestedActivities($condition)
-{
-  $condition = strtolower($condition);
-  $activities = [];
-  //i know what you are going to say i should use an api for this but am too lazy to look for one
-  if (strpos($condition, 'sun') !== false || strpos($condition, 'clear') !== false) {
-    $activities = [
-      ['name' => 'Sightseeing Tour', 'icon' => 'fa-binoculars'],
-      ['name' => 'Beach Day / Outdoor Picnic', 'icon' => 'fa-umbrella-beach'],
-      ['name' => 'Hiking or Nature Walk', 'icon' => 'fa-hiking']
-    ];
-  } elseif (strpos($condition, 'cloud') !== false) {
-    $activities = [
-      ['name' => 'City Exploration & Photography', 'icon' => 'fa-camera-retro'],
-      ['name' => 'Visit a Local Market', 'icon' => 'fa-store'],
-      ['name' => 'Cafe Hopping', 'icon' => 'fa-coffee']
-    ];
-  } elseif (strpos($condition, 'rain') !== false || strpos($condition, 'drizzle') !== false) {
-    $activities = [
-      ['name' => 'Museum or Art Gallery Visit', 'icon' => 'fa-landmark'],
-      ['name' => 'Indoor Shopping', 'icon' => 'fa-shopping-bag'],
-      ['name' => 'Try a Local Cooking Class', 'icon' => 'fa-utensils']
-    ];
-  } else {
-    $activities = [
-      ['name' => 'Explore Local Cuisine', 'icon' => 'fa-utensils'],
-      ['name' => 'Visit Historical Sites', 'icon' => 'fa-landmark-dome'],
-      ['name' => 'Check for Local Events', 'icon' => 'fa-calendar-check']
-    ];
-  }
-  return $activities;
-}
-
 $city = isset($_GET['city']) ? $_GET['city'] : '';
 $country = isset($_GET['country']) ? $_GET['country'] : '';
 
@@ -68,7 +35,6 @@ if (!$cityInfo) {
 } else {
   list($city, $country, $lat, $lon) = $cityInfo;
 
-  // --- Parallel API Requests using cURL ---
   $mh = curl_multi_init();
   $handles = [];
 
@@ -120,6 +86,47 @@ if (!$cityInfo) {
   if (!$currentData || !$forecastData) {
     $error = 'Failed to retrieve weather information.';
   } else {
+    $historyTemps = [];
+    $end_date = date('Y-m-d');
+    $start_date = date('Y-m-d', strtotime('-7 days'));
+
+    $historyUrl = "https://archive-api.open-meteo.com/v1/archive?latitude={$lat}&longitude={$lon}&start_date={$start_date}&end_date={$end_date}&daily=temperature_2m_max,temperature_2m_min&timezone=auto";
+
+    $historyData = json_decode(file_get_contents($historyUrl), true);
+
+    if ($historyData && isset($historyData['daily'])) {
+      $dates = $historyData['daily']['time'];
+      $maxTemps = $historyData['daily']['temperature_2m_max'];
+      $minTemps = $historyData['daily']['temperature_2m_min'];
+
+      for ($i = 0; $i < count($dates); $i++) {
+        $max = $maxTemps[$i];
+        $min = $minTemps[$i];
+
+        if (is_numeric($max) && is_numeric($min)) {
+          $avgTemp = ($max + $min) / 2;
+          $historyTemps[] = [
+            'date' => $dates[$i],
+            'temp' => round($avgTemp, 1)
+          ];
+        }
+      }
+    }
+
+    $forecastTemps = [];
+    $usedDates = [];
+    foreach ($forecastData['list'] as $entry) {
+      $date = substr($entry['dt_txt'], 0, 10);
+      $time = substr($entry['dt_txt'], 11, 5);
+      if ($time === '12:00' && !in_array($date, $usedDates)) {
+        $forecastTemps[] = [
+          'date' => $date,
+          'temp' => $entry['main']['temp']
+        ];
+        $usedDates[] = $date;
+        if (count($forecastTemps) >= 5) break;
+      }
+    }
     $destinationData = [
       'lat' => $lat,
       'lng' => $lon,
@@ -129,7 +136,7 @@ if (!$cityInfo) {
         'description' => $currentData['weather'][0]['description'],
         'humidity' => $currentData['main']['humidity'],
         'wind_speed' => round($currentData['wind']['speed'] * 3.6, 1),
-        'uv_index' => 2 // Placeholder
+        'uv_index' => "unknown",
       ],
       'forecast' => [],
       'photos' => $photosData['photos'] ?? []
@@ -164,7 +171,6 @@ if (!$cityInfo) {
         $count++;
       }
     }
-    $suggestedActivities = getSuggestedActivities($destinationData['current']['condition']);
   }
 }
 ?>
@@ -190,6 +196,7 @@ $headerImageUrl = !empty($destinationData['photos']) ? $destinationData['photos'
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/style-fixes.css">
   <link rel="stylesheet" href="css/gallery.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
     .destination-header {
@@ -341,7 +348,6 @@ $headerImageUrl = !empty($destinationData['photos']) ? $destinationData['photos'
             </div>
           </div>
 
-          <!-- 5-Day Forecast for the view more page -->
           <section class="mb-5">
             <h2 class="section-title" style="color: #0d9488;">5-Day Forecast</h2>
             <div class="row g-3">
@@ -357,6 +363,23 @@ $headerImageUrl = !empty($destinationData['photos']) ? $destinationData['photos'
               <?php endforeach; ?>
             </div>
           </section>
+          <div class="card mb-4">
+            <div class="card-body">
+              <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-2">
+                <h4 class="section-title mb-0" style="font-size: 1.2rem;">Temperature Data</h4>
+                <div class="btn-group" role="group" aria-label="Temperature data toggle" style="font-size:1.2rem">
+                  <input type="radio" class="btn-check" name="tempDataType" id="forecastBtn" value="forecast" checked>
+                  <label class="btn btn-outline-primary" for="forecastBtn">Upcoming Forecast</label>
+
+                  <input type="radio" class="btn-check" name="tempDataType" id="historyBtn" value="history">
+                  <label class="btn btn-outline-primary" for="historyBtn">History (Past 7 Days)</label>
+                </div>
+              </div>
+              <div class="chart-responsive-wrapper" style="position:relative;width:100%;max-width:100vw;min-height:250px;">
+                <canvas id="weatherChart" style="width:100%!important;max-width:100vw;height:350px;min-height:200px;"></canvas>
+              </div>
+            </div>
+          </div>
 
           <?php
           if (empty($destinationData['photos'])) {
@@ -389,24 +412,12 @@ $headerImageUrl = !empty($destinationData['photos']) ? $destinationData['photos'
             </section>
           <?php endif; ?>
 
-          <!-- Map from leaflet  -->
           <section>
             <h2 class="section-title" style="color: #0d9488;">Location on Map</h2>
             <div id="destination-map" class="map-container"></div>
           </section>
         </div>
         <div class="col-lg-4">
-          <!-- Suggested activities again am not using an api but if you find one for this let me know  -->
-          <section class="mb-5">
-            <h2 class="section-title" style="color: #0d9488;">Suggested Activities</h2>
-            <?php foreach ($suggestedActivities as $activity): ?>
-              <div class="activity-item">
-                <i class="fas <?php echo $activity['icon']; ?> me-2 text-primary"></i>
-                <span><?php echo htmlspecialchars($activity['name']); ?></span>
-              </div>
-            <?php endforeach; ?>
-          </section>
-
           <!-- weather news from the google something i dont know if its an api or what  -->
           <section>
             <h2 class="section-title" style="color: #0d9488;">Latest Weather News</h2>
@@ -427,8 +438,6 @@ $headerImageUrl = !empty($destinationData['photos']) ? $destinationData['photos'
       </div>
     </div>
   <?php endif; ?>
-
-  <!-- Photo Modal -->
   <div class="modal fade photo-modal" id="photoModal" tabindex="-1" aria-labelledby="photoModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
       <div class="modal-content">
@@ -488,27 +497,148 @@ $headerImageUrl = !empty($destinationData['photos']) ? $destinationData['photos'
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script src="js/gallery.js"></script>
   <script>
-    $(document).ready(function() {
+    document.addEventListener('DOMContentLoaded', function() {
       <?php if (!isset($error)): ?>
         var lat = <?php echo $destinationData['lat']; ?>;
         var lng = <?php echo $destinationData['lng']; ?>;
-        var map = L.map('destination-map').setView([lat, lng], 10);
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-          maxZoom: 18
-        }).addTo(map);
-
-        L.marker([lat, lng])
-          .addTo(map)
-          .bindPopup('<strong><?php echo htmlspecialchars($city); ?>, <?php echo htmlspecialchars($country); ?></strong>')
-          .openPopup();
 
         $('#photoModal').on('show.bs.modal', function(event) {
           var button = $(event.relatedTarget);
           var imgSrc = button.data('img-src');
           var modalImage = $('#modalImage');
           modalImage.attr('src', imgSrc);
+        });
+
+        const formatDate = (dateStr) => {
+          const date = new Date(dateStr);
+          return date.toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric'
+          });
+        };
+
+        const forecastData = {
+          labels: <?= isset($forecastTemps) && is_array($forecastTemps) ? json_encode(array_map(fn($d) => $d['date'], $forecastTemps)) : '[]' ?>,
+          datasets: [{
+            label: 'Forecast Temperature (°C)',
+            data: <?= isset($forecastTemps) && is_array($forecastTemps) ? json_encode(array_map(fn($d) => $d['temp'], $forecastTemps)) : '[]' ?>,
+            borderWidth: 2,
+            fill: false,
+            tension: 0.3,
+            borderColor: 'rgba(20, 184, 166, 1)',
+            backgroundColor: 'rgba(20, 184, 166, 0.2)'
+          }]
+        };
+
+        const historyData = {
+          labels: <?= isset($historyTemps) && is_array($historyTemps) ? json_encode(array_map(fn($d) => $d['date'], $historyTemps)) : '[]' ?>,
+          datasets: [{
+            label: 'Temperature Record (°C)',
+            data: <?= isset($historyTemps) && is_array($historyTemps) ? json_encode(array_map(fn($d) => $d['temp'], $historyTemps)) : '[]' ?>,
+            borderWidth: 2,
+            fill: false,
+            tension: 0.3,
+            borderColor: 'rgba(13, 148, 136, 1)',
+            backgroundColor: 'rgba(13, 148, 136, 0.2)'
+          }]
+        };
+        forecastData.labels = forecastData.labels.map(formatDate);
+        historyData.labels = historyData.labels.map(formatDate);
+        const map = L.map('destination-map').setView([<?php echo $lat; ?>, <?php echo $lon; ?>], 10);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+          maxZoom: 18
+        }).addTo(map);
+        L.marker([<?php echo $lat; ?>, <?php echo $lon; ?>])
+          .addTo(map)
+          .bindPopup('<strong><?php echo htmlspecialchars($city); ?>, <?php echo htmlspecialchars($country); ?></strong>')
+          .openPopup();
+
+        const ctx = document.getElementById('weatherChart').getContext('2d');
+        const weatherChart = new Chart(ctx, {
+          type: 'line',
+          data: forecastData,
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            aspectRatio: 2.2,
+            plugins: {
+              legend: {
+                display: true,
+                labels: {
+                  font: {
+                    size: 13
+                  }
+                }
+              },
+              title: {
+                display: true,
+                text: 'Temperature Trend',
+                font: {
+                  size: 16,
+                  weight: 'bold'
+                },
+                padding: {
+                  top: 10,
+                  bottom: 10
+                }
+              },
+              tooltip: {
+                enabled: true,
+                mode: 'index',
+                intersect: false
+              }
+            },
+            interaction: {
+              mode: 'nearest',
+              axis: 'x',
+              intersect: false
+            },
+            scales: {
+              y: {
+                beginAtZero: false,
+                title: {
+                  display: true,
+                  text: 'Temperature (°C)'
+                },
+                ticks: {
+                  font: {
+                    size: 12
+                  }
+                }
+              },
+              x: {
+                title: {
+                  display: true,
+                  text: 'Date'
+                },
+                ticks: {
+                  font: {
+                    size: 12
+                  },
+                  maxRotation: 45,
+                  minRotation: 0,
+                  autoSkip: true,
+                  maxTicksLimit: 7
+                }
+              }
+            },
+            layout: {
+              padding: {
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
+              }
+            }
+          }
+        });
+
+        $('input[name="tempDataType"]').on('change', function() {
+          const dataType = $(this).val();
+          weatherChart.data = dataType === 'forecast' ? forecastData : historyData;
+          weatherChart.update();
         });
       <?php endif; ?>
     });

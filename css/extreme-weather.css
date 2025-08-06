@@ -1,0 +1,36 @@
+.extreme-badge {
+    margin-left: 4px;
+    transition: all 0.3s ease;
+}
+
+.extreme-badge:hover {
+    transform: scale(1.1);
+}
+
+.badge.bg-danger {
+    background: linear-gradient(135deg, #dc3545, #9b1c28) !important;
+}
+
+.badge.bg-warning {
+    background: linear-gradient(135deg, #ffc107, #d39e00) !important;
+}
+
+.badge.bg-info {
+    background: linear-gradient(135deg, #17a2b8, #117a8b) !important;
+}
+
+.badge.bg-light {
+    background: linear-gradient(135deg, #f8f9fa, #dae0e5) !important;
+}
+
+.badge.bg-primary {
+    background: linear-gradient(135deg, #0d6efd, #0a58ca) !important;
+}
+
+.match-badge {
+    position: relative;
+}
+
+.match-badge .badge {
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}

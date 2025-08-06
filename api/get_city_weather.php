@@ -61,11 +61,10 @@ $currentWeather = [
     'description' => $currentData['weather'][0]['description'],
     'humidity' => $currentData['main']['humidity'],
     'wind_speed' => round($currentData['wind']['speed'] * 3.6, 1),
-    'uv_index' => 2, // Default since UV requires separate API call
+    'uv_index' => 'unknown', // default since UV requires separate API call remmber to add anoother api
     'precipitation' => isset($currentData['rain']) ? ($currentData['rain']['1h'] ?? 0) : 0
 ];
 
-// Apply temperature unit conversion
 if ($tempUnit === 'fahrenheit') {
     $currentWeather['temp'] = round($currentWeather['temp'] * 9 / 5 + 32);
     $currentWeather['temp_unit'] = '°F';
@@ -88,7 +87,6 @@ foreach ($forecastData['list'] as $forecastItem) {
             'wind_speed' => round($forecastItem['wind']['speed'] * 3.6, 1)
         ];
 
-        // Apply temperature unit conversion for forecast
         if ($tempUnit === 'fahrenheit') {
             $day['temp_min'] = round($day['temp_min'] * 9 / 5 + 32);
             $day['temp_max'] = round($day['temp_max'] * 9 / 5 + 32);
