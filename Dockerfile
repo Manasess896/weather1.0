@@ -6,7 +6,11 @@ RUN apt-get update && apt-get install -y \
     zip \
     curl \
     git \
-    && docker-php-ext-install zip pdo pdo_mysql
+    libssl-dev \
+    pkg-config \
+    && docker-php-ext-install zip pdo pdo_mysql \
+    && pecl install mongodb \
+    && docker-php-ext-enable mongodb
 
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite
