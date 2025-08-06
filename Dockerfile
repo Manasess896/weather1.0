@@ -6,7 +6,6 @@ RUN apt-get update && apt-get install -y \
     zip \
     curl \
     git \
-    libssl-dev \
     && docker-php-ext-install zip pdo pdo_mysql
 
 # Enable Apache mod_rewrite
@@ -18,15 +17,11 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Copy composer files first for better layer caching
 COPY composer.json composer.lock* /var/www/html/
 
-# Install MongoDB extension with compatible version
-RUN pecl install mongodb && docker-php-ext-enable mongodb
-
 # Set working directory
 WORKDIR /var/www/html
 
-# Modify composer.json to set specific MongoDB extension version
+# Install PHP dependencies
 RUN if [ -f "composer.json" ]; then \
-    sed -i 's/"mongodb\/mongodb": "\*"/"mongodb\/mongodb": "^1.15.0"/g' composer.json && \
     composer install --no-interaction --optimize-autoloader --no-dev --no-scripts --no-autoloader \
     ; fi
 
