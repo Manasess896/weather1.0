@@ -9,21 +9,37 @@ RUN apt-get update && apt-get install -y \
     libssl-dev \
     && docker-php-ext-install zip pdo pdo_mysql
 
-# Install MongoDB PHP extension
-RUN pecl install mongodb && docker-php-ext-enable mongodb
-
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Copy application files
+# Copy composer files first for better layer caching
+COPY composer.json composer.lock* /var/www/html/
+
+# Install MongoDB extension with compatible version
+RUN pecl install mongodb && docker-php-ext-enable mongodb
+
+# Set working directory
+WORKDIR /var/www/html
+
+# Modify composer.json to set specific MongoDB extension version
+RUN if [ -f "composer.json" ]; then \
+    sed -i 's/"mongodb\/mongodb": "\*"/"mongodb\/mongodb": "^1.15.0"/g' composer.json && \
+    composer install --no-interaction --optimize-autoloader --no-dev --no-scripts --no-autoloader \
+    ; fi
+
+# Copy the rest of the application
 COPY . /var/www/html/
 
-# Install PHP dependencies
-WORKDIR /var/www/html
-RUN if [ -f "composer.json" ]; then composer install --no-interaction --optimize-autoloader --no-dev; fi
+# Finish composer installation
+RUN if [ -f "composer.json" ]; then \
+    composer dump-autoload --optimize --no-dev \
+    ; fi
+
+# Set permissions
+RUN chown -R www-data:www-data /var/www/html/
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html/
