@@ -26,7 +26,7 @@
 
 <body>
 
-  <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #0d9488, #14b8a6);">
+  <nav class="navbar navbar-expand-lg navbar-dark" style="background: , #14b8a6;">
     <div class="container">
       <a class="navbar-brand" href="home">
         <i class="fas fa-cloud-sun-rain me-2"></i>
@@ -47,14 +47,14 @@
             <a class="nav-link" href="about">About</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="https://code-craft-website-solutions-2d68a0b57273.herokuapp.com/contact.php">Contact</a>
+            <a class="nav-link" href="https://manases.space/contact-us">Contact</a>
           </li>
         </ul>
       </div>
     </div>
   </nav>
 
-  <div class="py-5 text-center hero-section" style="background: linear-gradient(135deg, #1a1a1a, #2d2d2d); color: white;">
+  <div class="py-5 text-center hero-section" style="background:  #2d2d2d; color: white;">
     <div class="container">
       <h1 class="display-4" style="color: #14b8a6;">Find Your Perfect Weather Destination</h1>
       <p class="lead" style="color: #5eead4;">Tell us your ideal weather, and we'll find the best cities for your next trip.</p>
@@ -166,13 +166,13 @@
     </div>
     <p class="mt-2">Finding your perfect weather destinations...</p>
   </div>
-  <footer class="py-4 mt-5" style="background: linear-gradient(135deg, #1a1a1a, #2d2d2d); color: white;">
+  <footer class="py-4 mt-5" style="background:  #2d2d2d; color: white;">
     <div class="container">
       <div class="row">
         <div class="col-md-6">
           <h5><i class="fas fa-cloud-sun-rain me-2" style="color: #14b8a6;"></i> WeatherVoyager</h5>
           <p style="color: #5eead4;">Finding your perfect weather destination since 2025.</p>
-          <p style="color: #5eead4; font-size: 0.9em;">Created by <a href="https://code-craft-website-solutions-2d68a0b57273.herokuapp.com/home" target="_blank" style="color: #14b8a6; text-decoration: none;">Code Craft Website Solutions</a></p>
+          <p style="color: #5eead4; font-size: 0.9em;">Created by <a href="https://manases.space/home" target="_blank" style="color: #14b8a6; text-decoration: none;">Manases</a></p>
         </div>
         <div class="col-md-3">
           <h5 style="color: #14b8a6;">Links</h5>
@@ -180,7 +180,7 @@
             <li><a href="home" style="color: #5eead4; text-decoration: none;">Home</a></li>
             <li><a href="news" style="color: #5eead4; text-decoration: none;">Weather News</a></li>
             <li><a href="about" style="color: #5eead4; text-decoration: none;">About</a></li>
-            <li><a href="https://code-craft-website-solutions-2d68a0b57273.herokuapp.com/contact.php" style="color: #5eead4; text-decoration: none;">Contact</a></li>
+            <li><a href="https://manases.space/contact-us" style="color: #5eead4; text-decoration: none;">Contact</a></li>
           </ul>
         </div>
         <div class="col-md-3">

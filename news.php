@@ -111,7 +111,7 @@ if ($allNewsItems && $totalArticles > 0) {
       background: green;
       border-radius: 15px;
       color: white;
-      box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+    
     }
 
     .page-header h1 {
@@ -139,12 +139,12 @@ if ($allNewsItems && $totalArticles > 0) {
       padding: 25px;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
       transition: all 0.3s ease;
-      border-left: 4px solid teal;
+     
     }
 
     .news-item:hover {
       transform: translateY(-3px);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      /* box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); */
     }
 
     .news-title {
@@ -196,7 +196,7 @@ if ($allNewsItems && $totalArticles > 0) {
 
     .read-more:hover {
       transform: translateY(-1px);
-      box-shadow: 0 3px 10px rgba(39, 174, 96, 0.3);
+      /* box-shadow: 0 3px 10px rgba(39, 174, 96, 0.3); */
     }
 
     .error-message {
@@ -249,7 +249,7 @@ if ($allNewsItems && $totalArticles > 0) {
     .back-button {
       display: inline-block;
       padding: 12px 24px;
-      background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+      background:  #7f8c8d;
       color: white;
       text-decoration: none;
       border-radius: 25px;
@@ -265,7 +265,7 @@ if ($allNewsItems && $totalArticles > 0) {
     .refresh-button {
       display: inline-block;
       padding: 10px 20px;
-      background: linear-gradient(135deg, #f39c12, #d68910);
+      background:  #d68910;
       color: white;
       text-decoration: none;
       border-radius: 20px;
@@ -310,19 +310,19 @@ if ($allNewsItems && $totalArticles > 0) {
     }
 
     .pagination a {
-      background: linear-gradient(135deg, #ecf0f1, #bdc3c7);
+      background:  #bdc3c7;
       color: #2c3e50;
     }
 
     .pagination a:hover {
-      background: linear-gradient(135deg, #3498db, #2980b9);
+      background:  #2980b9;
       color: white;
       transform: translateY(-2px);
       box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
     }
 
     .pagination .current {
-      background: linear-gradient(135deg, #3498db, #2980b9);
+      background:  #2980b9;
       color: white;
       box-shadow: 0 3px 8px rgba(52, 152, 219, 0.3);
     }
@@ -335,13 +335,13 @@ if ($allNewsItems && $totalArticles > 0) {
     }
 
     .pagination .nav-button {
-      background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+      background:  #7f8c8d;
       color: white;
       font-weight: 600;
     }
 
     .pagination .nav-button:hover:not(.disabled) {
-      background: linear-gradient(135deg, #7f8c8d, #95a5a6);
+      background:  #95a5a6;
       transform: translateY(-2px);
       box-shadow: 0 4px 10px rgba(149, 165, 166, 0.3);
     }
@@ -354,7 +354,7 @@ if ($allNewsItems && $totalArticles > 0) {
     .load-more-button {
       display: inline-block;
       padding: 12px 30px;
-      background: linear-gradient(135deg, #9b59b6, #8e44ad);
+      background:  #8e44ad;
       color: white;
       text-decoration: none;
       border-radius: 25px;
@@ -388,13 +388,13 @@ if ($allNewsItems && $totalArticles > 0) {
 <body>
   <div class="news-container">
     <div class="page-header">
-      <h1>🌦️ Weather News</h1>
+      <h1> Weather News</h1>
       <p>Stay updated with the latest weather news and forecasts from around the world</p>
     </div>
 
     <div class="back-nav">
       <a href="home" class="back-button">← Back to Weather App</a>
-      <a href="news" class="refresh-button">🔄 Refresh News</a>
+      <a href="news" class="refresh-button"> Refresh News</a>
     </div>
 
     <?php if ($totalArticles > 0): ?>
@@ -477,7 +477,7 @@ if ($allNewsItems && $totalArticles > 0) {
       <?php endif; ?>
     <?php else: ?>
       <div class="error-message">
-        <h3>⚠️ Unable to Load Weather News</h3>
+        <h3> Unable to Load Weather News</h3>
         <p>We're having trouble fetching the latest weather news at the moment. Please check your internet connection and try again later.</p>
         <p><a href="news" class="refresh-button" style="margin-top: 15px;">🔄 Try Again</a></p>
       </div>
@@ -485,7 +485,7 @@ if ($allNewsItems && $totalArticles > 0) {
     <?php if ($newsItems && count($newsItems) > 0 && $currentPage < $totalPages): ?>
       <div class="load-more-container">
         <a href="news?page=<?php echo $currentPage + 1; ?>" class="load-more-button">
-          📰 Load More Articles (Page <?php echo $currentPage + 1; ?>)
+           Load More Articles (Page <?php echo $currentPage + 1; ?>)
         </a>
       </div>
     <?php endif; ?>
@@ -507,7 +507,7 @@ if ($allNewsItems && $totalArticles > 0) {
     });
     document.querySelectorAll('.read-more').forEach(link => {
       link.addEventListener('click', function() {
-        this.innerHTML = 'Opening... ⏳';
+        this.innerHTML = 'Opening... ';
         this.style.pointerEvents = 'none';
       });
     });

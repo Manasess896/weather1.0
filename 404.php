@@ -32,7 +32,7 @@
                         <a class="nav-link" href="about">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="https://code-craft-website-solutions-2d68a0b57273.herokuapp.com/contact.php">Contact</a>
+                        <a class="nav-link" href="https://manases.space/contact-us">Contact</a>
                     </li>
                 </ul>
             </div>
@@ -71,7 +71,7 @@
                     <div class="small">
                         <a href="home" class="text-white me-2">Home</a>
                         <a href="about" class="text-white me-2">About</a>
-                        <a href="https://code-craft-website-solutions-2d68a0b57273.herokuapp.com/contact.php" class="text-white">Contact</a>
+                        <a href="https://manases.space/contact-us" class="text-white">Contact</a>
                     </div>
                 </div>
             </div>

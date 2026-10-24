@@ -41,7 +41,7 @@
     .back-button {
       display: inline-block;
       padding: 12px 30px;
-      background: linear-gradient(135deg, #3498db, #2980b9);
+      background:  #2980b9;
       color: white;
       text-decoration: none;
       border-radius: 25px;

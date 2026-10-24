@@ -135,7 +135,7 @@ body {
 }
 
 .hero-section {
-    background: linear-gradient(135deg, var(--primary-black) 0%, var(--secondary-black) 50%, var(--teal-secondary) 100%);
+    background:var(--secondary-black);
     color: var(--pure-white);
     padding: 5rem 0;
     position: relative;
@@ -172,9 +172,7 @@ body {
     border-radius: 20px;
     -webkit-border-radius: 20px;
     -moz-border-radius: 20px;
-    -webkit-box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    -moz-box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    box-shadow: 0 10px 30px var(--shadow-light);
+   
     background: #ffffff;
     background: var(--pure-white);
     -webkit-transition: all 0.3s ease;
@@ -185,9 +183,9 @@ body {
 }
 
 .card:hover {
-    -webkit-box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    /* -webkit-box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
     -moz-box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-    box-shadow: 0 20px 40px var(--shadow-medium);
+    box-shadow: 0 20px 40px var(--shadow-medium); */
 }
 
 .card-title {
@@ -219,7 +217,7 @@ body {
 
 .destination-card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 20px 40px var(--shadow-medium);
+    /* box-shadow: 0 20px 40px var(--shadow-medium); */
     border-color: var(--teal-primary);
 }
 
@@ -231,7 +229,7 @@ body {
     background: #14b8a6;
     background: -webkit-linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
     background: -moz-linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
-    background: linear-gradient(135deg, var(--teal-primary) 0%, var(--teal-secondary) 100%);
+    background: var(--teal-secondary);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -248,7 +246,7 @@ body {
     background: #22c55e;
     background: -webkit-linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
     background: -moz-linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-    background: linear-gradient(135deg, var(--green-primary) 0%, var(--green-secondary) 100%);
+    background: var(--green-secondary);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -267,7 +265,7 @@ body {
     background: #5eead4;
     background: -webkit-linear-gradient(135deg, #5eead4, #86efac);
     background: -moz-linear-gradient(135deg, #5eead4, #86efac);
-    background: linear-gradient(135deg, var(--teal-light), var(--green-light));
+    background: var(--green-light);
     color: #1a1a1a;
     color: var(--primary-black);
     border-radius: 50px;
@@ -285,7 +283,7 @@ body {
     background: #14b8a6;
     background: -webkit-linear-gradient(135deg, #14b8a6, #22c55e);
     background: -moz-linear-gradient(135deg, #14b8a6, #22c55e);
-    background: linear-gradient(135deg, var(--teal-primary), var(--green-primary));
+    background: var(--green-primary);
     color: #ffffff;
     color: var(--pure-white);
     -webkit-transform: translateY(-3px);

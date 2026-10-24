@@ -82,11 +82,7 @@ body {
   font-size: 2.5rem !important;
   font-weight: 700;
   color: var(--green-primary);
-  background: linear-gradient(
-    135deg,
-    var(--green-primary) 0%,
-    var(--green-secondary) 100%
-  );
+  background:  var(--green-primary);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
