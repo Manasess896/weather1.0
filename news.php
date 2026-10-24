@@ -108,7 +108,7 @@ if ($allNewsItems && $totalArticles > 0) {
       text-align: center;
       margin-bottom: 40px;
       padding: 40px 20px;
-      background: linear-gradient(135deg, teal, green);
+      background: green;
       border-radius: 15px;
       color: white;
       box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
@@ -185,7 +185,7 @@ if ($allNewsItems && $totalArticles > 0) {
     .read-more {
       display: inline-block;
       padding: 8px 16px;
-      background: linear-gradient(135deg, #27ae60, #219a52);
+      background:  #219a52;
       color: white;
       text-decoration: none;
       border-radius: 20px;
